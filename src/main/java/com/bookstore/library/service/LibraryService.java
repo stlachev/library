@@ -20,12 +20,12 @@ public class LibraryService {
     public void insertAuthorWithBooks() {
 
         Author author = new Author();
-        author.setName("Alicia Tom");
+        author.setName("Tom");
         author.setAge(38);
 
         Book book = new Book();
         book.setGenre("Fantasy");
-        book.setTitle("The book");
+        book.setTitle("Book");
 
         author.addBook(book);
 
