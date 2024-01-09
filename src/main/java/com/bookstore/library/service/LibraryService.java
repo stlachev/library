@@ -33,18 +33,17 @@ public class LibraryService {
     }
 
     @Transactional
-    public void deleteBookOfAuthor() {
+    public void deleteBookOfAuthor(String name) {
 
-        Author author = authorRepository.fetchByName("Alicia Tom");
+        Author author = authorRepository.fetchByName(name);
         Book book = author.getBooks().get(0);
-
-        author.removeBook(book); // use removeBook() helper
+        author.removeBook(book);
     }
 
     @Transactional
-    public void deleteAllBooksOfAuthor() {
-        Author author = authorRepository.fetchByName("J. N.");
-        author.removeBooks(); // use removeBooks() helper
+    public void deleteAllBooksOfAuthor(String name) {
+        Author author = authorRepository.fetchByName(name);
+        author.removeBooks();
     }
 
 }

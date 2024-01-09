@@ -11,7 +11,7 @@ import com.bookstore.library.entity.Book;
 import com.bookstore.library.repository.LibraryRepository;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/lib")
 public class LibraryController {
     private LibraryRepository libraryRepo;
 
@@ -19,7 +19,7 @@ public class LibraryController {
         this.libraryRepo = libraryRepo;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Book> findAll() {
         return libraryRepo.findAll();
     }
@@ -36,5 +36,13 @@ public class LibraryController {
         libraryRepo.save(book);
         return "redirect:/";
     }
+/*
+    @PostMapping("/insert")
+    public void initialInsert() {
+        libraryRepo.insertAuthorWithBooks();
+    }
+*/
+
+
 
 }

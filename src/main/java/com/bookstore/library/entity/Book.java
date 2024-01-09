@@ -2,8 +2,6 @@ package com.bookstore.library.entity;
 
 import java.io.Serializable;
 
-//import org.springframework.data.annotation.Id;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
