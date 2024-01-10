@@ -1,4 +1,9 @@
+//**************************************************** */
+//                  Not used
+//***************************************************** */
 package com.bookstore.library.controller;
+
+import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,16 +18,26 @@ import com.bookstore.library.repository.BookRepository;
 @RestController
 @RequestMapping("/book")
 public class BookController {
-    private BookRepository bookRepo;
+    private BookRepository bookRepository;
+//    private AuthorRepository authorRepo;
 
-    public BookController(BookRepository bookRepo) {
-        this.bookRepo = bookRepo;
+    public BookController(BookRepository bookRepository) { //, AuthorRepository authorRepo) {
+        this.bookRepository = bookRepository;
+//        this.authorRepo = authorRepo;
     }
 
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<Book> getAllBooks() {
-        // This returns a JSON or XML with the users
-        return bookRepo.findAll();
+    @GetMapping(path="/allbooks")
+    public @ResponseBody  List<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
+    @PostMapping(path="/getbook")
+    public @ResponseBody List<Book> getBook(@RequestParam String title) {
+    // curl http://localhost:8080/book/getbook -d title=book
+    // curl http://localhost:8080/book/allbooks
+        List<Book> bl = bookRepository.findByTitle(title);
+
+        return bl;
     }
 
     @PostMapping(path="/add") // Map ONLY POST Requests
@@ -30,19 +45,20 @@ public class BookController {
         , @RequestParam String author) {
     // curl http://localhost:8080/book/add -d title=book -d ganre=x -d author=Me
     // curl http://localhost:8080/book/all
-    /*     AuthorRepository authorRepo;
-        Author au = authorRepo.fetchByName(author);
-        if (au == null)
-            return "author missing";*/
+//        AuthorRepository authorRepo;
+//        List<Author> au_id = authorRepo.findByName(author);
+//        if (au_id.isEmpty())
+//            return "author not found";
         Book b = new Book();
         b.setTitle(title);
         b.setGenre(ganre);
+//        Author au = au_id.get(0);
         //Author au = new Author();
         //au.addBook(b);
         //au.setName(author);
-        //b.setAuthor(au);
-        bookRepo.save(b);
-        return "Saved";
+//        b.setAuthor(au);
+        b = bookRepository.save(b);
+        return "Saved: " + b.toString();
     }
 
 }
