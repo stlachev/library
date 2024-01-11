@@ -11,7 +11,6 @@ import com.bookstore.library.entity.Author;
 
 @Repository
 public interface LibraryRepository extends JpaRepository<Author, Long> {
-//public interface LibraryRepository extends ListCrudRepository<Book, Long> {
 
     @Query("SELECT a FROM Author a JOIN FETCH a.books WHERE a.name = ?1")
     Author fetchByName(String name);
