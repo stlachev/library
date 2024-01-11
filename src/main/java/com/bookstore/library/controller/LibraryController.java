@@ -27,25 +27,32 @@ public class LibraryController {
         this.authorRepository = authorRepository;
     }
 
-    @GetMapping(path="/all")
-    public @ResponseBody List<String> getAll() {
-    // curl http://localhost:8080/lib/all
-        List<Author> la = authorRepository.findAll();
-        List<String> ls =  new ArrayList<>();
-        for (int i = 0; i < la.size(); i++) {
-            ls.add(la.get(i).toString());
-            List<Book> lb = bookRepository.findByAuthor(la.get(i));
-            for (int ii = 0; ii < lb.size(); ii++) {
-                ls.add("  -> " + lb.get(ii).toString());
-            }
+    // curl http://localhost:8080/lib/addbook -d title=book -d ganre=x -d author=Me
+    @PostMapping(path="/addbook")
+    public @ResponseBody String addBook(@RequestParam String title, @RequestParam String ganre
+        , @RequestParam String author) {
+        List<Author> au_id = authorRepository.findByName(author);
+        if (au_id.isEmpty())
+            return "Author not found";
+        Book b = new Book();
+        b.setTitle(title);
+        b.setGenre(ganre);
+        Author au = au_id.get(0);
+        List<Book> lb = au.getBooks();
+        for (int i = 0; i < lb.size(); i++) {
+            if (lb.get(i).getTitle().equals(title))
+                return "Book from the author exist";
         }
-        return ls;
+        au.addBook(b);
+        b.setAuthor(au);
+        b = bookRepository.save(b);
+        return "Saved: " + b.toString();
     }
 
-//----------------- books -----------------------
+    //----------------- books -----------------------
+    // curl http://localhost:8080/lib/allbooks
     @GetMapping(path="/allbooks")
     public @ResponseBody List<String> getAllBooks() {
-    // curl http://localhost:8080/lib/allbooks
         List<Book> lb = bookRepository.findAll();
         List<String> ls =  new ArrayList<>();
         for (int i = 0; i < lb.size(); i++) {
@@ -54,9 +61,9 @@ public class LibraryController {
         return ls;
     }
 
+    // curl http://localhost:8080/lib/getbook -d title=book
     @PostMapping(path="/getbook")
     public @ResponseBody String getBook(@RequestParam String title) {
-    // curl http://localhost:8080/lib/getbook -d title=book
         List<Book> bl = bookRepository.findByTitle(title);
         if (bl.isEmpty())
             return "Book not found";
@@ -64,44 +71,9 @@ public class LibraryController {
         return book.toString() + "\n" + book.getAuthor().toString() + "\n";
     }
 
-    @PostMapping(path="/getbooks")
-    public @ResponseBody List<String> getBooksFromAuthor(@RequestParam String name) {
-    // curl http://localhost:8080/lib/getbooks -d name=First
-        List<Author> la = authorRepository.findByName(name);
-        List<String> ls = new ArrayList<>();
-        if (la.isEmpty())
-            return ls;
-        Author author = la.get(0);
-        List<Book> lb = author.getBooks();
-//        List<Book> lb = bookRepository.findByAuthor(la.get(0));
-        if (lb.isEmpty())
-            return ls;
-        for (int i = 0; i < lb.size(); i++) {
-            ls.add("--> " + lb.get(i).toString());
-        }
-        return ls;
-    }
-
-    @PostMapping(path="/addbook")
-    public @ResponseBody String addBook(@RequestParam String title, @RequestParam String ganre
-        , @RequestParam String author) {
-    // curl http://localhost:8080/lib/addbook -d title=book -d ganre=x -d author=Me
-        List<Author> au_id = authorRepository.findByName(author);
-        if (au_id.isEmpty())
-            return "Author not found";
-        Book b = new Book();
-        b.setTitle(title);
-        b.setGenre(ganre);
-        Author au = au_id.get(0);
-        au.addBook(b);
-        b.setAuthor(au);
-        b = bookRepository.save(b);
-        return "Saved: " + b.toString();
-    }
-
+//    curl http://localhost:8080/lib/deletebook -d title=book
     @PostMapping(path="/deletebook")
     public @ResponseBody String deleteBook(@RequestParam String title) {
-//    curl http://localhost:8080/lib/deletebook -d title=book
         List<Book> lb = bookRepository.findByTitle(title);
         if (lb.isEmpty())
             return "Book not found";
@@ -111,11 +83,10 @@ public class LibraryController {
     }
 
 //----------------- authors -----------------------
-//Iterable<Author>
 
+    // curl http://localhost:8080/lib/allauthors
     @GetMapping(path="/allauthors")
     public @ResponseBody List<String> getAllAuthors() {
-    // curl http://localhost:8080/lib/allauthors
         List<Author> la = authorRepository.findAll();
         List<String> ls = new ArrayList<>();
         for (int i = 0; i < la.size(); i++) {
@@ -124,19 +95,19 @@ public class LibraryController {
         return ls;
     }
 
+    // curl http://localhost:8080/lib/readauthor -d name=First
     @PostMapping(path="/readauthor")
     public @ResponseBody String findAuthor(@RequestParam String name) {
-    // curl http://localhost:8080/lib/readauthor -d name=First
         List<Author> la = authorRepository.findByName(name);
         if (la.isEmpty())
             return "Author not found";
         return la.get(0).toString();
     }
     
+    // curl http://localhost:8080/lib/addauthor -d name=First -d age=36
     @PostMapping(path="/addauthor")
     public @ResponseBody String addAuthor(@RequestParam String name
         , @RequestParam int age) {
-    // curl http://localhost:8080/lib/addauthor -d name=First -d age=36
         if (!authorRepository.findByName(name).isEmpty())
             return "Author Exists";
         Author a = new Author();
@@ -146,14 +117,74 @@ public class LibraryController {
         return "Saved: " + a.toString();
     }
 
+//    curl http://localhost:8080/lib/deleteauthor -d name=me
     @PostMapping(path="/deletauthor")
     public @ResponseBody String deleteAuthor(@RequestParam String name) {
-//    curl http://localhost:8080/lib/deleteauthor -d name=me
         List<Author> la = authorRepository.findByName(name);
         if (la.isEmpty())
             return "Author not found";
         authorRepository.deleteById(la.get(0).getId());
         return "Author Deleted";
+    }
+
+    // curl http://localhost:8080/lib/authorage -d name=First -d age=100
+    @PostMapping(path="/authorage")
+    public @ResponseBody String setAuthorAge(@RequestParam String name
+        , @RequestParam int age) {
+        List<Author> la = authorRepository.findByName(name);
+        if (la.isEmpty())
+            return "Author not found";
+        Author a = la.get(0);
+        a.setAge(age);
+        a = authorRepository.save(a);
+        return "Updated: " + a.toString();
+    }
+
+    // curl http://localhost:8080/lib/authorname -d name=First -d newname=Second
+    @PostMapping(path="/authorname")
+    public @ResponseBody String setAuthorAge(@RequestParam String name
+        , @RequestParam String newname) {
+        List<Author> la = authorRepository.findByName(name);
+        if (la.isEmpty())
+            return "Author not found";
+        if (!authorRepository.findByName(newname).isEmpty())
+            return "Author new name exists";
+        Author a = la.get(0);
+        a.setName(newname);
+        a = authorRepository.save(a);
+        return "Updated: " + a.toString();
+    }
+
+    // curl http://localhost:8080/lib/getbooks -d name=First
+    @PostMapping(path="/getbooks")
+    public @ResponseBody List<String> getBooksFromAuthor(@RequestParam String name) {
+        List<Author> la = authorRepository.findByName(name);
+        List<String> ls = new ArrayList<>();
+        if (la.isEmpty())
+            return ls;
+        Author author = la.get(0);
+        List<Book> lb = author.getBooks();
+        if (lb.isEmpty())
+            return ls;
+        for (int i = 0; i < lb.size(); i++) {
+            ls.add("--> " + lb.get(i).toString());
+        }
+        return ls;
+    }
+
+    // curl http://localhost:8080/lib/all
+    @GetMapping(path="/all")
+    public @ResponseBody List<String> getAll() {
+        List<Author> la = authorRepository.findAll();
+        List<String> ls =  new ArrayList<>();
+        for (int i = 0; i < la.size(); i++) {
+            ls.add(la.get(i).toString());
+            List<Book> lb = la.get(i).getBooks();
+            for (int ii = 0; ii < lb.size(); ii++) {
+                ls.add("  -> " + lb.get(ii).toString());
+            }
+        }
+        return ls;
     }
 
 }
