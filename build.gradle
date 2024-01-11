@@ -13,18 +13,27 @@ java {
 
 repositories {
 	mavenCentral()
+//    jcenter()
+//    gradlePluginPortal()
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '3.2.0'
-    //implementation 'com.h2database:h2'
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.1.0'
-	//implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 	implementation group: 'org.thymeleaf', name: 'thymeleaf-spring4', version: '3.0.15.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation group: 'org.hibernate', name: 'hibernate-core', version: '6.4.0.Final', ext: 'pom'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//	implementation 'org.projectlombok:lombok:1.18.20'
+	//compileOnly group: 'org.projectlombok', name: 'lombok-maven-plugin', version: '1.18.12.0'
+//	implementation group: 'org.projectlombok', name: 'lombok-maven-plugin', version: '1.18.20.0'
+	//annotationProcessor 'org.projectlombok' , name: 'lombok-maven-plugin', version: '1.18.12.0'
+	
+//	testCompileOnly 'org.projectlombok:lombok:1.12.30'
+//	testAnnotationProcessor 'org.projectlombok:lombok:1.12.30'
+
 }
 
 tasks.named('test') {
