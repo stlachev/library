@@ -1,5 +1,5 @@
 package com.bookstore.library.entity.dto;
-/*
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-*/
-public class BookDTO {
 
+public class BookDTO {
+    private Long id;
+    private String title;
+    private String genre;
 }

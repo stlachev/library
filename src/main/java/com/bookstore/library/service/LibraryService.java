@@ -1,49 +1,12 @@
 package com.bookstore.library.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+public interface LibraryService {
 
-import com.bookstore.library.entity.Author;
-import com.bookstore.library.entity.Book;
-import com.bookstore.library.repository.AuthorRepository;
+    public String addBook(String title, String ganre, String author);
+    public String deleteBook(String title, String author);
+    public String updateBook(String title, String author, String newauthor);
 
-@Service
-public class LibraryService {
-
-    private final AuthorRepository authorRepository;
-
-    public LibraryService(AuthorRepository authorRepository) {
-
-        this.authorRepository = authorRepository;
-    }
-
-    public void insertAuthorWithBooks() {
-
-        Author author = new Author();
-        author.setName("Tom");
-        author.setAge(38);
-
-        Book book = new Book();
-        book.setGenre("Fantasy");
-        book.setTitle("Book");
-
-        author.addBook(book);
-
-        authorRepository.save(author);
-    }
-
-    @Transactional
-    public void deleteBookOfAuthor(String name) {
-
-        Author author = authorRepository.fetchByName(name);
-        Book book = author.getBooks().get(0);
-        author.removeBook(book);
-    }
-
-    @Transactional
-    public void deleteAllBooksOfAuthor(String name) {
-        Author author = authorRepository.fetchByName(name);
-        author.removeBooks();
-    }
-
+    public void insertAuthorWithBooks();
+    public void deleteBookOfAuthor(String name);
+    public void deleteAllBooksOfAuthor(String name);
 }

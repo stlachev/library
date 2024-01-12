@@ -2,6 +2,8 @@ package com.bookstore.library.service;
 
 import java.util.List;
 
+import com.bookstore.library.entity.Author;
+
 public interface AuthorService {
 
     public List<String> getAllAuthors();
@@ -13,5 +15,5 @@ public interface AuthorService {
     public List<String> getBooksFromAuthor(String name);
     public List<String> getAll();
 
-    public List<String> getAlltst();
+    public List<Author> getAlltst();
 }

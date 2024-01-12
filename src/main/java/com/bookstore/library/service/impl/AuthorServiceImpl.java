@@ -31,6 +31,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public String findAuthor(String name) {
+        if (name.isEmpty())
+            return "Empty";
         List<Author> la = authorRepository.findByName(name);
         if (la.isEmpty())
             return "Author not found";
@@ -38,6 +40,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
     
     public String addAuthor(String name, int age) {
+        if (name.isEmpty())
+            return "Empty";
         if (!authorRepository.findByName(name).isEmpty())
             return "Author Exists";
         Author a = new Author();
@@ -56,6 +60,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public String setAuthorAge(String name, int age) {
+        if (name.isEmpty())
+            return "Empty";
         List<Author> la = authorRepository.findByName(name);
         if (la.isEmpty())
             return "Author not found";
@@ -66,9 +72,13 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public String changeName(String name, String newname) {
+        if (name.isEmpty())
+            return "Empty";
         List<Author> la = authorRepository.findByName(name);
         if (la.isEmpty())
             return "Author not found";
+        if (newname.isEmpty())
+            return "Empty";
         if (!authorRepository.findByName(newname).isEmpty())
             return "Author new name exists";
         Author a = la.get(0);
@@ -78,8 +88,10 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     public List<String> getBooksFromAuthor(String name) {
-        List<Author> la = authorRepository.findByName(name);
         List<String> ls = new ArrayList<>();
+        if (name.isEmpty())
+            return ls;
+        List<Author> la = authorRepository.findByName(name);
         if (la.isEmpty())
             return ls;
         Author author = la.get(0);
@@ -105,9 +117,13 @@ public class AuthorServiceImpl implements AuthorService {
         return ls;
     }
     
-    public List<String> getAlltst(){
-        List<String> ls =  new ArrayList<>();
-        return ls;
+    public List<Author> getAlltst(){
+/*        List<Author> author =  new ArrayList<Author>();
+        List<Author> la = authorRepository.findAll();
+        for (int i = 0; i < la.size(); i++) {
+            author.add(la.get(i));
+        }*/
+        return authorRepository.findAll().stream().toList();
     }
     
 }
