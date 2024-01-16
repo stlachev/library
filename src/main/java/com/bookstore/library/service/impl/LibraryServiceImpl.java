@@ -1,12 +1,14 @@
 package com.bookstore.library.service.impl;
 
-import java.util.List;
-
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bookstore.library.entity.Author;
 import com.bookstore.library.entity.Book;
+import com.bookstore.library.entity.dto.AuthorDTO;
+import com.bookstore.library.entity.dto.BookDTO;
 import com.bookstore.library.repository.AuthorRepository;
 import com.bookstore.library.repository.BookRepository;
 import com.bookstore.library.service.LibraryService;
@@ -15,15 +17,80 @@ import com.bookstore.library.service.LibraryService;
 @Transactional
 public class LibraryServiceImpl  implements LibraryService {
 
+    @Autowired
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final ModelMapper modelMapper;
 
-    public LibraryServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public LibraryServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository, ModelMapper modelMapper) {
 
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.modelMapper = modelMapper;
     }
 
+    @Override
+    public void setBookAuthor(Long bookId, Long authorId) {
+        Book book = bookRepository.findById(bookId).orElse(null);
+        Author author = authorRepository.findById(authorId).orElse(null);
+        book.setAuthor(author);
+        bookRepository.save(book);
+    }
+
+    @Override
+    public BookDTO createBook(BookDTO bookDTO) {
+        Book returnBook;
+        if (bookDTO.getAuthor() != null && bookDTO.getAuthor().getAuthor_id() != null){
+            AuthorDTO dtoAuthor = bookDTO.getAuthor();
+            bookDTO.setAuthor(null);
+            Book newBook = modelMapper.map(bookDTO, Book.class);
+            returnBook = bookRepository.save(newBook);
+            setBookAuthor(returnBook.getId(), dtoAuthor.getAuthor_id());
+        }else{
+            Book newBook = modelMapper.map(bookDTO, Book.class);
+            returnBook = bookRepository.save(newBook);
+        }
+
+        return modelMapper.map(returnBook, BookDTO.class);
+    }
+
+    @Override
+    public BookDTO createBookWithAuthorId(BookDTO bookDTO, Long id) {
+        Author author = authorRepository.findById(id).orElse(null);
+        if (author == null)
+            return null;
+        Book book = bookRepository.findById(bookDTO.getId()).orElse(null);
+        author.addBook(book);
+        book.setAuthor(author);
+        book = bookRepository.save(book);
+        return modelMapper.map(book, BookDTO.class);
+    }
+
+//-------------------------------------------------------------------------
+
+/*
+    @Override
+    public BookDTO createBookWithAuthorName(BookDTO bookDTO, String name) {
+
+        Author author = authorRepository.findByName(name);
+        Book returnBook;
+
+        if (bookDTO.getAuthor() != null && bookDTO.getAuthor().getAuthor_id() != null){
+            AuthorDTO dtoAuthor = bookDTO.getAuthor();
+            bookDTO.setAuthor(null);
+            Book newBook = modelMapper.map(bookDTO, Book.class);
+            returnBook = bookRepository.save(newBook);
+            setBookAuthor(returnBook.getId(), dtoAuthor.getAuthor_id());
+        }else{
+            Book newBook = modelMapper.map(bookDTO, Book.class);
+            returnBook = bookRepository.save(newBook);
+        }
+
+        return modelMapper.map(returnBook, BookDTO.class);
+    }
+*/
+
+/*
     public String addBook(String title, String ganre, String author) {
         if (author.isEmpty())
             return "Empty";
@@ -116,5 +183,5 @@ public class LibraryServiceImpl  implements LibraryService {
         Author author = authorRepository.fetchByName(name);
         author.removeBooks();
     }
-
+*/
 }

@@ -22,6 +22,8 @@ public class Book implements Serializable {
     private Long id;
     private String title;
     private String genre;
+    private Long qty;
+    private float price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
@@ -45,6 +47,22 @@ public class Book implements Serializable {
 
     public String getGenre() {
         return genre;
+    }
+
+    public Long getQty() {
+        return this.qty;
+    }
+
+    public void setQty(Long qty) {
+        this.qty = qty;
+    }
+
+    public float getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public void setGenre(String genre) {
@@ -86,5 +104,5 @@ public class Book implements Serializable {
     public String toString() {
         return "Book{" + "id=" + id + ", title=" + title + ", genre=" + genre + '}';
     }
-    
+
 }

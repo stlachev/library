@@ -51,11 +51,11 @@ public class Author implements Serializable {
         }
     }
 
-    public Long getId() {
+    public Long getAuthor_Id() {
         return author_id;
     }
 
-    public void setId(Long author_id) {
+    public void setAuthor_Id(Long author_id) {
         this.author_id = author_id;
     }
 

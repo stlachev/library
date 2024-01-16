@@ -15,4 +15,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     void deleteById(@NonNull Long idLong);
     List<Book> findByTitle(String title);
     List<Book> findByAuthor(Author author);
+
+//    @Modifying
+//    @Query("delete from Book b where b.title=:title")
+//    List<Book> deleteBooks(@Param("title") String title);
+
 }

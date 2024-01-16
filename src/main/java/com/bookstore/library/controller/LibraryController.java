@@ -1,22 +1,43 @@
 package com.bookstore.library.controller;
 
+import java.rmi.ServerException;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bookstore.library.entity.dto.BookDTO;
 import com.bookstore.library.service.LibraryService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/lib")
 public class LibraryController {
-    private LibraryService libraryService;
 
-    public LibraryController(LibraryService libraryService) {
+    private final LibraryService libraryService;
+    private final ModelMapper modelMapper;
+
+    public LibraryController(LibraryService libraryService, ModelMapper modelMapper) {
         this.libraryService = libraryService;
+        this.modelMapper = modelMapper;
     }
 
+    @PostMapping(path = "/create")
+    public ResponseEntity<BookDTO> create(@Valid @RequestBody BookDTO bookDTO) throws ServerException {
+        return new ResponseEntity<>(libraryService.createBook(bookDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/createwithauthorid/{id}")
+    public ResponseEntity<BookDTO> createBookWithAuthorId(@Valid @RequestBody BookDTO bookDTO, Long id) throws ServerException {
+        return new ResponseEntity<>(libraryService.createBookWithAuthorId(bookDTO, id), HttpStatus.CREATED);
+    }
+
+/*
     // curl http://localhost:8080/lib/add -d title=book -d ganre=x -d author=Me
     @PostMapping(path="/add")
     public @ResponseBody String addBook(@RequestParam String title, @RequestParam String ganre
@@ -52,5 +73,5 @@ public class LibraryController {
     public void deleteAllBooksOfAuthor(@RequestParam String author){
         libraryService.deleteAllBooksOfAuthor(author);
     };
-
+*/
 }
