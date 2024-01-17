@@ -5,13 +5,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
-import com.bookstore.library.entity.Author;
+import com.bookstore.library.entity.Customer;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Long> {
-        
-    @Query("SELECT a FROM Author a JOIN FETCH a.books WHERE a.name = ?1")
-    Author fetchByName(String name);
-    Author findByName(@NonNull String name);
+public interface CustomerRepository extends JpaRepository<Customer, Long > {
+
+    @Query("SELECT a FROM Customer a WHERE a.customer_name = ?1")
+    Customer findByName(@NonNull String name);
     void deleteById(@NonNull Long id);
+
 }

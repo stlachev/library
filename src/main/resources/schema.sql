@@ -7,7 +7,7 @@ create table if not exists authors (
 create table if not exists books (
     id int primary key,
     title varchar(30) not null,
-    ganre varchar(15),
+    genre varchar(15),
     qty int,
     price float(5,2),
     author_id int,
@@ -24,10 +24,10 @@ create table if not exists orders (
     id int primary key,
     order_id int not null,
     customer_id int,
-    book_id int,
-    is_out boolean,
-    constraint fk_customer foreign key (customer_id) references customers(id),
-    constraint fk_book foreign key (book_id) references books(id)
+--    book_id int,
+--    is_out boolean,
+    constraint fk_customer foreign key (customer_id) references customers(id)
+--    constraint fk_book foreign key (book_id) references books(id)
 );
 
 create table if not exists invoice {

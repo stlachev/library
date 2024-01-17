@@ -41,4 +41,13 @@ public class Invoice implements Serializable {
     public void setTotal(float total) {
         this.total = total;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", order_id='" + getOrder_id() + "'" +
+            ", total='" + getTotal() + "'" +
+            "}";
+    }
 }

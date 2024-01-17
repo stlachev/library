@@ -97,12 +97,18 @@ public class Book implements Serializable {
 
     @Override
     public int hashCode() {
-        return 2021;
+        return 2024;
     }
 
     @Override
     public String toString() {
-        return "Book{" + "id=" + id + ", title=" + title + ", genre=" + genre + '}';
+        return "{" +
+            " id='" + getId() + "'" +
+            ", title='" + getTitle() + "'" +
+            ", genre='" + getGenre() + "'" +
+            ", qty='" + getQty() + "'" +
+            ", price='" + getPrice() + "'" +
+            ", author='" + getAuthor() + "'" +
+            "}";
     }
-
 }

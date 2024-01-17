@@ -1,13 +1,15 @@
 package com.bookstore.library.controller;
 
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +23,11 @@ import jakarta.validation.Valid;
 @RequestMapping("/book")
 public class BookController {
 
+    @Autowired
     private final BookService bookService;
-    private final ModelMapper modelMapper;
 
-    public BookController(BookService bookService, ModelMapper modelMapper) {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/all")
@@ -43,9 +44,17 @@ public class BookController {
         return book.map(bookDTO -> new ResponseEntity<>(bookDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping(path = "/update/{id}")
-    public ResponseEntity<BookDTO> update(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws Exception {
-        BookDTO updatedBookDTO = bookService.update(id, bookDTO);
+    @PutMapping(path = "/setauthor/{id}")
+    public ResponseEntity<BookDTO> setAuthor(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws ServerException {
+        BookDTO updatedBookDTO = bookService.setAuthor(id, bookDTO);
+        return (updatedBookDTO == null) ?
+            new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+            new ResponseEntity<>(updatedBookDTO, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/update")
+    public ResponseEntity<BookDTO> update(@Valid @RequestBody BookDTO bookDTO) throws Exception {
+        BookDTO updatedBookDTO = bookService.update(bookDTO);
         return (updatedBookDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(updatedBookDTO, HttpStatus.OK);
@@ -57,48 +66,24 @@ public class BookController {
         return book.map(bookDTO -> new ResponseEntity<>(bookDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-/*
-    @PostMapping(path = "/delete/{title}")
-    public ResponseEntity<List<BookDTO>> deleteByName(@PathVariable String title) throws Exception {
-        List<BookDTO> bookDTOList = bookService.deleteBooks(title);
-        return !bookDTOList.isEmpty()
-                ? new ResponseEntity<>(bookDTOList, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-*/
-/*    @PostMapping(path = "/create")
+    @PostMapping(path = "/create")
     public ResponseEntity<BookDTO> create(@Valid @RequestBody BookDTO bookDTO) throws ServerException {
-        Book createdAuthor = bookService.createBook(bookDTO);
-        AuthorDTO createdAuthorDTO = modelMapper.map(createdAuthor, AuthorDTO.class);
-        return new ResponseEntity<>(createdAuthorDTO, HttpStatus.CREATED);
-    }
-*/
-
-//    @PostMapping(path = "/create")
-//    public ResponseEntity<BookDTO> create(@Valid @RequestBody BookDTO bookDTO) throws ServerException {
-//        return new ResponseEntity<>(bookService.createBook(bookDTO), HttpStatus.CREATED);
-//    }
-
-
-/*
-
-    //----------------- books -----------------------
-    // curl http://localhost:8080/book/all
-    @GetMapping(path="/all")
-    public @ResponseBody List<String> getAllBooks() {
-        return bookService.getAllBooks();
+        BookDTO createdBookDTO = bookService.createBook(bookDTO);
+        return (createdBookDTO == null) ?
+            new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
+            new ResponseEntity<>(createdBookDTO, HttpStatus.CREATED);
     }
 
-    // curl http://localhost:8080/book/get -d title=book
-    @PostMapping(path="/get")
-    public @ResponseBody String getBook(@RequestParam String title) {
-        return bookService.getBook(title);
+    @PostMapping(path = "/createwithauthorid/{id}")
+    public ResponseEntity<BookDTO> createBookWithAuthorId(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws ServerException {
+        return new ResponseEntity<>(bookService.createBookWithAuthorId(id ,bookDTO), HttpStatus.CREATED);
     }
 
-    // curl http://localhost:8080/book/delete -d title=book
-    @PostMapping(path="/delete")
-    public @ResponseBody String deleteBook(@RequestParam String title) {
-        return bookService.deleteBook(title);
+    @PostMapping(path = "/deletebookauthor/{id}")
+    public ResponseEntity<BookDTO> deleteBookAuthor(@PathVariable Long id) throws Exception {
+        BookDTO bookDTO = bookService.deleteBookAuthor(id);
+        return (bookDTO == null) ?
+            new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+            new ResponseEntity<>(bookDTO, HttpStatus.OK);
     }
-*/
 }

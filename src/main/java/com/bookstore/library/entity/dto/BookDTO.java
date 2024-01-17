@@ -16,7 +16,7 @@ public class BookDTO {
     private Long id;
     private String title;
     private String genre;
-    private AuthorDTO author;
     private Long qty;
     private float price;
+    private AuthorDTO author;
 }
