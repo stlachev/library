@@ -20,7 +20,7 @@ public class OrdersDTO {
     Long id;
 //    Long order_id;
 //    Long customer_id;
-//    Long book_id;
+    Long book_id;
 //    boolean is_out;
     private Customer customer;
     private List<Book> books;

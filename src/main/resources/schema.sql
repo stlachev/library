@@ -1,3 +1,4 @@
+/*
 create table if not exists authors (
     author_id int primary key,
     author_name varchar(40) not null,
@@ -35,3 +36,4 @@ create table if not exists invoice {
     order_id int,
     total float(5,2)
 };
+*/

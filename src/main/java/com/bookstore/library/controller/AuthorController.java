@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.library.entity.dto.AuthorDTO;
-import com.bookstore.library.entity.dto.BookDTO;
 import com.bookstore.library.service.AuthorService;
 
 import jakarta.validation.Valid;
 @RestController
-@RequestMapping("/author")
+@RequestMapping("/authors")
 public class AuthorController {
 
     @Autowired
@@ -31,33 +31,27 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public ResponseEntity<List<AuthorDTO>> getAll() throws Exception {
         List<AuthorDTO> authorDTOList = authorService.findAll();
-        return !authorDTOList.isEmpty() ?
-                new ResponseEntity<>(authorDTOList, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return authorDTOList.isEmpty() ?
+            new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+            new ResponseEntity<>(authorDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<AuthorDTO> getById(@PathVariable Long id) throws Exception {
-        Optional<AuthorDTO> author = authorService.getById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<AuthorDTO> get(@PathVariable Long id) throws Exception {
+        Optional<AuthorDTO> author = authorService.get(id);
         return author.map(authorDTO -> new ResponseEntity<>(authorDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping(path = "/create")
-    public ResponseEntity<AuthorDTO> createAuthor(@Valid @RequestBody AuthorDTO authorDTO) throws ServerException {
-        AuthorDTO createdAuthorDTO = authorService.createAuthor(authorDTO);
+    @PostMapping("")
+    public ResponseEntity<AuthorDTO> create(@Valid @RequestBody AuthorDTO authorDTO) throws ServerException {
+        AuthorDTO createdAuthorDTO = authorService.create(authorDTO);
         return new ResponseEntity<>(createdAuthorDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping(path="/delete/{id}")
-    public ResponseEntity<AuthorDTO> deleteAuthorById(@PathVariable Long id) throws Exception {
-        Optional<AuthorDTO> author = authorService.deleteAuthorById(id);
-        return author.map(authorDTO -> new ResponseEntity<>(authorDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
-
-    @PutMapping(path = "/update")
+    @PutMapping("")
     public ResponseEntity<AuthorDTO> update(@Valid @RequestBody AuthorDTO authorDTO) throws Exception {
         AuthorDTO updatedAuthorDTO = authorService.update(authorDTO);
         return (updatedAuthorDTO == null) ?
@@ -65,19 +59,19 @@ public class AuthorController {
             new ResponseEntity<>(updatedAuthorDTO, HttpStatus.OK);
     }
 
-    @GetMapping(path="/name/{name}")
-    public ResponseEntity<AuthorDTO> findByName(@PathVariable String name)  throws Exception {
-        AuthorDTO authorDTO = authorService.findByName(name);
-        return (authorDTO == null) ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                new ResponseEntity<>(authorDTO, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<AuthorDTO> delete(@PathVariable Long id) throws Exception {
+        Optional<AuthorDTO> author = authorService.delete(id);
+        return author.map(authorDTO -> new ResponseEntity<>(authorDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping(path="/books/{name}")
-    public ResponseEntity <List<BookDTO>> getBooksFromAuthor(@PathVariable String name) {
-        List<BookDTO> bookDTOList = authorService.getBooksFromAuthor(name);
-        return (!bookDTOList.isEmpty()) ?
-                new ResponseEntity<>(bookDTOList, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//-----------------------------
+
+    @GetMapping("/find/{name}")
+    public ResponseEntity<List<AuthorDTO>> findByName(@PathVariable String name)  throws Exception {
+        List<AuthorDTO> listAuthorDTO = authorService.findByName(name);
+        return (listAuthorDTO == null) ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(listAuthorDTO, HttpStatus.OK);
     }
 }

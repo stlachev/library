@@ -10,9 +10,10 @@ import jakarta.validation.constraints.NotNull;
 public interface CustomerService {
 
     public List<CustomerDTO> findAll();
-    public Optional<CustomerDTO> getById(@NotNull Long id);
-    public CustomerDTO createCustomer(@NotNull CustomerDTO customerDTO);
-    public Optional<CustomerDTO> deleteCustomerById(@NotNull Long id);
+    public Optional<CustomerDTO> get(@NotNull Long id);
+    public CustomerDTO create(@NotNull CustomerDTO customerDTO);
     public CustomerDTO update(@NotNull CustomerDTO customerDTO);
-    public CustomerDTO findByName(@NotNull String name);
+    public Optional<CustomerDTO> delete(@NotNull Long id);
+    
+    public List<CustomerDTO> findByName(@NotNull String name);
 }

@@ -1,5 +1,7 @@
 package com.bookstore.library.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
@@ -11,7 +13,7 @@ import com.bookstore.library.entity.Customer;
 public interface CustomerRepository extends JpaRepository<Customer, Long > {
 
     @Query("SELECT a FROM Customer a WHERE a.customer_name = ?1")
-    Customer findByName(@NonNull String name);
+    List<Customer> findByName(@NonNull String name);
     void deleteById(@NonNull Long id);
 
 }

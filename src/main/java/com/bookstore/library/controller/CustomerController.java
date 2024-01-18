@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ import com.bookstore.library.service.CustomerService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
 
     @Autowired
@@ -31,33 +32,27 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("")
     public ResponseEntity<List<CustomerDTO>> getAll() throws Exception {
         List<CustomerDTO> customerDTOList = customerService.findAll();
-        return !customerDTOList.isEmpty() ?
-                new ResponseEntity<>(customerDTOList, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return customerDTOList.isEmpty() ?
+            new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+            new ResponseEntity<>(customerDTOList, HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<CustomerDTO> getById(@PathVariable Long id) throws Exception {
-        Optional<CustomerDTO> customer = customerService.getById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerDTO> get(@PathVariable Long id) throws Exception {
+        Optional<CustomerDTO> customer = customerService.get(id);
         return customer.map(customerDTO -> new ResponseEntity<>(customerDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping(path = "/create")
-    public ResponseEntity<CustomerDTO> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) throws ServerException {
-        CustomerDTO createdCustomerDTO = customerService.createCustomer(customerDTO);
+    @PostMapping("")
+    public ResponseEntity<CustomerDTO> create(@Valid @RequestBody CustomerDTO customerDTO) throws ServerException {
+        CustomerDTO createdCustomerDTO = customerService.create(customerDTO);
         return new ResponseEntity<>(createdCustomerDTO, HttpStatus.CREATED);
     }
 
-    @PutMapping(path="/delete/{id}")
-    public ResponseEntity<CustomerDTO> deleteCustomerById(@PathVariable Long id) throws Exception {
-        Optional<CustomerDTO> customer = customerService.deleteCustomerById(id);
-        return customer.map(customerDTO -> new ResponseEntity<>(customerDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
-
-    @PutMapping(path = "/update")
+    @PutMapping("")
     public ResponseEntity<CustomerDTO> update(@Valid @RequestBody CustomerDTO customerDTO) throws Exception {
         CustomerDTO updatedCustomerDTO = customerService.update(customerDTO);
         return (updatedCustomerDTO == null) ?
@@ -65,12 +60,19 @@ public class CustomerController {
             new ResponseEntity<>(updatedCustomerDTO, HttpStatus.OK);
     }
 
-    @GetMapping(path="/name/{name}")
-    public ResponseEntity<CustomerDTO> findByName(@PathVariable String name)  throws Exception {
-        CustomerDTO customerDTO = customerService.findByName(name);
-        return (customerDTO == null) ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                new ResponseEntity<>(customerDTO, HttpStatus.OK);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CustomerDTO> delete(@PathVariable Long id) throws Exception {
+        Optional<CustomerDTO> customer = customerService.delete(id);
+        return customer.map(customerDTO -> new ResponseEntity<>(customerDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
+//-------------------------------------------
+
+    @GetMapping("/find/{name}")
+    public ResponseEntity<List<CustomerDTO>> findByName(@PathVariable String name)  throws Exception {
+        List<CustomerDTO> customerDTOList = customerService.findByName(name);
+        return customerDTOList.isEmpty() ?
+            new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+            new ResponseEntity<>(customerDTOList, HttpStatus.OK);
+    }
 }

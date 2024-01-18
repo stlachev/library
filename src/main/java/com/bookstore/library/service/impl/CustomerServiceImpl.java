@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<CustomerDTO> getById(@NotNull Long id) {
+    public Optional<CustomerDTO> get(@NotNull Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         return (customer.isPresent()) ?
             customer.map(customerOp -> modelMapper.map(customer, CustomerDTO.class)) :
@@ -46,14 +46,26 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO createCustomer(@NotNull CustomerDTO customerDTO) {
+    public CustomerDTO create(@NotNull CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
         Customer customerNew = customerRepository.save(customer);
         return modelMapper.map(customerNew, CustomerDTO.class);
     }
 
     @Override
-    public Optional<CustomerDTO> deleteCustomerById(@NotNull Long id) {
+    public CustomerDTO update(@NotNull CustomerDTO customerDTO) {
+    //    Customer customer = customerRepository.findById(customerDTO.getId()).orElse(null);
+    //    if (customer == null) {
+    //        return null;
+    //    }
+    //    modelMapper.map(customerDTO, customer);
+        Customer customer = modelMapper.map(customerDTO, Customer.class);
+        customerRepository.save(customer);
+        return modelMapper.map(customer, CustomerDTO.class);
+    }
+
+    @Override
+    public Optional<CustomerDTO> delete(@NotNull Long id) {
         Optional<Customer> customer =  customerRepository.findById(id);
         if (!customer.isPresent()) {
             return Optional.empty();
@@ -62,24 +74,14 @@ public class CustomerServiceImpl implements CustomerService {
         return customer.map(authorOp -> modelMapper.map(customer, CustomerDTO.class));
     }
 
-    @Override
-    public CustomerDTO update(@NotNull CustomerDTO customerDTO) {
-        Customer customer = customerRepository.findById(customerDTO.getId()).orElse(null);
-        if (customer == null) {
-            return null;
-        }
-        modelMapper.map(customerDTO, customer);
-        customerRepository.save(customer);
-        return modelMapper.map(customer, CustomerDTO.class);
-    }
+//------------------------
 
     @Override
-    public CustomerDTO findByName(@NotNull String name) {
-        Customer customer = customerRepository.findByName(name);
-        if (customer != null) {
-            return modelMapper.map(customer, CustomerDTO.class);
-        }
-        return null;
+    public List<CustomerDTO> findByName(@NotNull String name) {
+        List<Customer> customers = customerRepository.findByName(name);
+        return customers.stream()
+                .map(customer -> modelMapper.map(customer, CustomerDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

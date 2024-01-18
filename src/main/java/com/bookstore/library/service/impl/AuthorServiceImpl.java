@@ -1,6 +1,5 @@
 package com.bookstore.library.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bookstore.library.entity.Author;
-import com.bookstore.library.entity.Book;
 import com.bookstore.library.entity.dto.AuthorDTO;
-import com.bookstore.library.entity.dto.BookDTO;
 import com.bookstore.library.repository.AuthorRepository;
 import com.bookstore.library.service.AuthorService;
 
@@ -32,7 +29,6 @@ public class AuthorServiceImpl implements AuthorService {
         this.modelMapper = modelMapper;
     }
 
-
     @Override
     public List<AuthorDTO> findAll() {
         List<Author> authors = authorRepository.findAll();
@@ -42,7 +38,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Optional<AuthorDTO> getById(@NotNull Long id) {
+    public Optional<AuthorDTO> get(@NotNull Long id) {
         Optional<Author> author = authorRepository.findById(id);
         return (author.isPresent()) ?
             author.map(authorOp -> modelMapper.map(author, AuthorDTO.class)) :
@@ -50,14 +46,26 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO createAuthor(@NotNull AuthorDTO authorDto) {
-        Author author = modelMapper.map(authorDto, Author.class);
+    public AuthorDTO create(@NotNull AuthorDTO authorDTO) {
+        Author author = modelMapper.map(authorDTO, Author.class);
         author = authorRepository.save(author);
         return modelMapper.map(author, AuthorDTO.class);
     }
 
     @Override
-    public Optional<AuthorDTO> deleteAuthorById(@NotNull Long id) {
+    public AuthorDTO update(@NotNull AuthorDTO authorDTO) {
+    //    Author author = authorRepository.findById(authorDTO.getAuthor_id()).orElse(null);
+    //    if (author == null) {
+    //       return null;
+    //    }
+    //    modelMapper.map(authorDTO, author);
+        Author author = modelMapper.map(authorDTO, Author.class);
+        authorRepository.save(author);
+        return modelMapper.map(author, AuthorDTO.class);
+    }
+
+    @Override
+    public Optional<AuthorDTO> delete(@NotNull Long id) {
         Optional<Author> author =  authorRepository.findById(id);
         if (!author.isPresent()) {
             return Optional.empty();
@@ -66,41 +74,13 @@ public class AuthorServiceImpl implements AuthorService {
         return author.map(authorOp -> modelMapper.map(author, AuthorDTO.class));
     }
 
-    @Override
-    public AuthorDTO update(@NotNull AuthorDTO authorDTO) {
-        Author author = authorRepository.findById(authorDTO.getAuthor_id()).orElse(null);
-        if (author == null) {
-            return null;
-        }
-        modelMapper.map(authorDTO, author);
-        authorRepository.save(author);
-        return modelMapper.map(author, AuthorDTO.class);
-    }
+//-------------------------------
 
     @Override
-    public AuthorDTO findByName(@NotNull String authorName) {
-        Author author = authorRepository.findByName(authorName);
-        if (author != null) {
-            return modelMapper.map(author, AuthorDTO.class);
-        }
-        return null;
-    }
-
-    public void deleteById(@NotNull Long id) {
-        authorRepository.deleteById(id);
-    }
-
-    public List<BookDTO> getBooksFromAuthor(@NotNull String name) {
-        List<BookDTO> ls = new ArrayList<BookDTO>();
-        if (name.isEmpty())
-            return ls;
-        Author author = authorRepository.findByName(name);
-        if (author == null)
-            return ls;
-
-        List<Book> books = author.getBooks();
-        return books.stream()
-            .map(book -> modelMapper.map(book, BookDTO.class))
-            .collect(Collectors.toList());
+    public List<AuthorDTO> findByName(@NotNull String authorName) {
+        List<Author> authors = authorRepository.findByName(authorName);
+        return authors.stream()
+                .map(author -> modelMapper.map(author, AuthorDTO.class))
+                .collect(Collectors.toList());
     }
 }

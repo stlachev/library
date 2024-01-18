@@ -10,8 +10,11 @@ import jakarta.validation.constraints.NotNull;
 public interface OrdersService {
 
     public List<OrdersDTO> findAll();
-    public Optional<OrdersDTO> getById(@NotNull Long id);
-    public OrdersDTO createOrder(@NotNull OrdersDTO orderDTO);
-    public Optional<OrdersDTO> deleteOrderById(@NotNull Long id);
+    public Optional<OrdersDTO> get(@NotNull Long id);
+    public OrdersDTO create(@NotNull OrdersDTO orderDTO);
     public OrdersDTO update(@NotNull OrdersDTO ordersDTO);
+    public Optional<OrdersDTO> delete(@NotNull Long id);
+
+    public OrdersDTO updateCustomer(@NotNull Long id, @NotNull OrdersDTO orderDTO);
+    public OrdersDTO addBook(@NotNull Long id, @NotNull OrdersDTO orderDTO);
 }

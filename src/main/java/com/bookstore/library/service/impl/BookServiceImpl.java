@@ -43,7 +43,7 @@ public class BookServiceImpl  implements BookService {
     }
 
     @Override
-    public Optional<BookDTO> getById(@NotNull Long id) {
+    public Optional<BookDTO> get(@NotNull Long id) {
         Optional<Book> book = bookRepository.findById(id);
         return (book.isPresent()) ?
                 book.map(bookOp -> modelMapper.map(book, BookDTO.class)) :
@@ -51,7 +51,35 @@ public class BookServiceImpl  implements BookService {
     }
 
     @Override
-    public Optional<BookDTO> deleteBookById(@NotNull Long id) {
+    public BookDTO create(@NotNull BookDTO bookDTO) {
+        Book returnBook;
+        if (bookDTO.getAuthor() != null && bookDTO.getAuthor().getAuthor_id() != null){
+            AuthorDTO dtoAuthor = bookDTO.getAuthor();
+            bookDTO.setAuthor(null);
+            Book newBook = modelMapper.map(bookDTO, Book.class);
+            returnBook = bookRepository.save(newBook);
+            setBookAuthor(returnBook.getId(), dtoAuthor.getAuthor_id());
+        }else{
+            Book newBook = modelMapper.map(bookDTO, Book.class);
+            returnBook = bookRepository.save(newBook);
+        }
+        return modelMapper.map(returnBook, BookDTO.class);
+    }
+
+    @Override
+    public BookDTO update(@NotNull BookDTO bookDTO) {
+    //    Book book = bookRepository.findById(bookDTO.getId()).orElse(null);
+    //    if (book == null) {
+    //        return null;
+    //    }
+    //    modelMapper.map(bookDTO, book);
+        Book book = modelMapper.map(bookDTO, Book.class);
+        bookRepository.save(book);
+        return modelMapper.map(book, BookDTO.class);
+    }
+
+    @Override
+    public Optional<BookDTO> delete(@NotNull Long id) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
             bookRepository.deleteById(id);
@@ -61,32 +89,32 @@ public class BookServiceImpl  implements BookService {
         }
     }
 
-    @Override
-    public BookDTO deleteBookByTitle(@NotNull String title) {
-        List<Book> lb = bookRepository.findByTitle(title);
-        if (lb.isEmpty())
-            return null;
-        Book book = lb.get(0);
-        bookRepository.deleteById(book.getId());
-        return modelMapper.map(book, BookDTO.class);
-    }
-
-    @Override
-    public BookDTO update(@NotNull BookDTO bookDTO) {
-        Book book = bookRepository.findById(bookDTO.getId()).orElse(null);
-        if (book == null) {
-            return null;
-        }
-        modelMapper.map(bookDTO, book);
-        bookRepository.save(book);
-        return modelMapper.map(book, BookDTO.class);
-    }
+//------------------------------
 
     private void setBookAuthor(@NotNull Long bookId, @NotNull Long authorId) {
         Book book = bookRepository.findById(bookId).orElse(null);
         Author author = authorRepository.findById(authorId).orElse(null);
         book.setAuthor(author);
         bookRepository.save(book);
+    }
+
+//-----------------------------
+
+    @Override
+    public List<BookDTO> findByTitle(@NotNull String title) {
+        List<Book> books = bookRepository.findByTitle(title);
+        return books.stream()
+                .map(book -> modelMapper.map(book, BookDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDTO> findByAuthor(@NotNull Long id) {
+        Author author = authorRepository.findById(id).orElse(null);
+        List<Book> books = bookRepository.findByAuthor(author);
+        return books.stream()
+                .map(book -> modelMapper.map(book, BookDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -102,22 +130,6 @@ public class BookServiceImpl  implements BookService {
         book.setAuthor(author);
         book = bookRepository.save(book);
         return modelMapper.map(book, BookDTO.class);
-    }
-
-    @Override
-    public BookDTO createBook(@NotNull BookDTO bookDTO) {
-        Book returnBook;
-        if (bookDTO.getAuthor() != null && bookDTO.getAuthor().getAuthor_id() != null){
-            AuthorDTO dtoAuthor = bookDTO.getAuthor();
-            bookDTO.setAuthor(null);
-            Book newBook = modelMapper.map(bookDTO, Book.class);
-            returnBook = bookRepository.save(newBook);
-            setBookAuthor(returnBook.getId(), dtoAuthor.getAuthor_id());
-        }else{
-            Book newBook = modelMapper.map(bookDTO, Book.class);
-            returnBook = bookRepository.save(newBook);
-        }
-        return modelMapper.map(returnBook, BookDTO.class);
     }
 
     @Override
@@ -139,6 +151,16 @@ public class BookServiceImpl  implements BookService {
             return null;
         book.setAuthor(null);
         book = bookRepository.save(book);
+        return modelMapper.map(book, BookDTO.class);
+    }
+
+    @Override
+    public BookDTO deleteBookByTitle(@NotNull String title) {
+        List<Book> lb = bookRepository.findByTitle(title);
+        if (lb.isEmpty())
+            return null;
+        Book book = lb.get(0);
+        bookRepository.deleteById(book.getId());
         return modelMapper.map(book, BookDTO.class);
     }
 
