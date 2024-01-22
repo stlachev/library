@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bookstore.library.entity.Book;
 import com.bookstore.library.entity.Customer;
 import com.bookstore.library.entity.Orders;
+import com.bookstore.library.entity.OrdersList;
 import com.bookstore.library.entity.dto.OrdersDTO;
 import com.bookstore.library.repository.BookRepository;
 import com.bookstore.library.repository.CustomerRepository;
+import com.bookstore.library.repository.OrdersListRepository;
 import com.bookstore.library.repository.OrdersRepository;
 import com.bookstore.library.service.OrdersService;
 
@@ -26,17 +28,23 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Autowired
     private final OrdersRepository ordersRepository;
+    private final OrdersListRepository ordersListRepository;
     private final CustomerRepository customerRepository;
     private final BookRepository bookRepository;
+//    private final BookService bookService;
     private final ModelMapper modelMapper;
 
     public OrdersServiceImpl(OrdersRepository ordersRepository,
+            OrdersListRepository ordersListRepository,
             CustomerRepository customerRepository,
             BookRepository bookRepository,
+//            BookService bookService,
             ModelMapper modelMapper) {
         this.ordersRepository = ordersRepository;
+        this.ordersListRepository = ordersListRepository;
         this.customerRepository = customerRepository;
         this.bookRepository = bookRepository;
+//        this.bookService = bookService;
         this.modelMapper = modelMapper;
     }
 
@@ -65,13 +73,13 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public OrdersDTO update(@NotNull OrdersDTO orderDTO) {
-    //    Orders orders = ordersRepository.findById(ordersDTO.getId()).orElse(null);
-    //    if (orders == null) {
+    //    Orders order = ordersRepository.findById(ordersDTO.getId()).orElse(null);
+    //    if (order == null) {
     //        return null;
     //    }
-    //    modelMapper.map(ordersDTO, orders);
+    //    modelMapper.map(ordersDTO, order);
         Orders order = modelMapper.map(orderDTO, Orders.class);
-        ordersRepository.save(order);
+        order = ordersRepository.save(order);
         return modelMapper.map(order, OrdersDTO.class);
     }
 
@@ -106,9 +114,15 @@ public class OrdersServiceImpl implements OrdersService {
         if (!book.isPresent()) {
             return null;
         }
-        order.addBooks(book.get());
+        OrdersList ordersList = ordersListRepository.findByOrderId(orderDTO.getId());
+        if (ordersList == null) {
+            ordersList= new OrdersList();
+        }
+        ordersList.setBook(book.get());
+        ordersList.setOrder(order);
+        ordersList = ordersListRepository.save(ordersList);
+        order.addOrdersList(ordersList);
         Orders orderNew = ordersRepository.save(order);
         return modelMapper.map(orderNew, OrdersDTO.class);
     }
-
 }

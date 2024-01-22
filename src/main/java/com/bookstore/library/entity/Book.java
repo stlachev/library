@@ -77,38 +77,4 @@ public class Book implements Serializable {
         this.author = author;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        
-        if (this == obj) {
-            return true;
-        }
-        
-        if (obj == null) {
-            return false;
-        }
-        
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        
-        return id != null && id.equals(((Book) obj).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 2024;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", title='" + getTitle() + "'" +
-            ", genre='" + getGenre() + "'" +
-            ", qty='" + getQty() + "'" +
-            ", price='" + getPrice() + "'" +
-            ", author='" + getAuthor() + "'" +
-            "}";
-    }
 }

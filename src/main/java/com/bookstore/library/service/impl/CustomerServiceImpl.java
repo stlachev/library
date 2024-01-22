@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
     //    }
     //    modelMapper.map(customerDTO, customer);
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-        customerRepository.save(customer);
+        customer = customerRepository.save(customer);
         return modelMapper.map(customer, CustomerDTO.class);
     }
 

@@ -1,9 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,9 +26,9 @@ public class Author implements Serializable {
     private String name;
     private int age;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "author", orphanRemoval = true)
-    private List<Book> books = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true)
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = CascadeType.ALL)
+    private Set<Book> books = new HashSet<>();
 
     public void addBook(Book book) {
         this.books.add(book);
@@ -45,7 +45,6 @@ public class Author implements Serializable {
 
         while (iterator.hasNext()) {
             Book book = iterator.next();
-
             book.setAuthor(null);
             iterator.remove();
         }
@@ -75,18 +74,12 @@ public class Author implements Serializable {
         this.age = age;
     }
 
-    public List<Book> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 
-    @Override
-    public String toString() {
-        return "Author{" + "author_id=" + author_id + ", name=" + name
-                + ", age=" + age + '}';
-    }
-    
 }

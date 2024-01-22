@@ -1,8 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,67 +24,30 @@ public class Orders implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-//    Long order_id;
-//    Long customer_id;
-//    Long book_id;
-//    boolean is_out;
-
-//---------------------------------
     @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "customer_id", referencedColumnName="id")
+    @JoinColumn(name = "customer_fk", referencedColumnName="id")
     private Customer customer;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "book_id")
-    private List<Book> books;// = new ArrayList<>();
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
+    private Set<OrdersList> orders = new HashSet<>();
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name="book_id", referencedColumnName="id")
-//    private List<Book> books = new ArrayList<>();
-
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-//    private List<Book> books = new ArrayList<>();
-    
-
-    public Orders() {
-        this.customer = null;
-        this.books = new ArrayList<>();
+    public void addOrdersList(OrdersList orders) {
+        this.orders.add(orders);
     }
 
-//    public Orders(Long id, Customer customer, List<Book> books) {
-//        this.id = id;
-//        this.customer = customer;
-//        this.books = books;
-//    }
-
-//---------------------------------
-    public Customer getCustomer() {
-        return this.customer;
+    public void removeOrdersList(OrdersList orders) {
+        this.orders.remove(orders);
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void removeOrdersLists() {
+        Iterator<OrdersList> iterator = this.orders.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+            iterator.remove();
+        }
     }
-
-    public List<Book> getBooks() {
-        return this.books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    public void addBooks(Book book) {
-        this.books.add(book);
-    }
-
-//    public void deleteBooks(Book book) {
-//        this.books.delete();
-//    }
-
-//----------------------------------
 
     public Long getId() {
         return this.id;
@@ -93,12 +57,20 @@ public class Orders implements Serializable {
         this.id = id;
     }
 
+    public Customer getCustomer() {
+        return this.customer;
+    }
 
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            "}";
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Set<OrdersList> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<OrdersList> orders) {
+        this.orders = orders;
     }
 
 }

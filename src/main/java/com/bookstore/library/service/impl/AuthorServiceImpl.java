@@ -60,7 +60,7 @@ public class AuthorServiceImpl implements AuthorService {
     //    }
     //    modelMapper.map(authorDTO, author);
         Author author = modelMapper.map(authorDTO, Author.class);
-        authorRepository.save(author);
+        author =authorRepository.save(author);
         return modelMapper.map(author, AuthorDTO.class);
     }
 

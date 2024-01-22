@@ -1,11 +1,17 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Table(name = "customers")
@@ -17,8 +23,32 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     String customer_name;
     String customer_address;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Orders> orders = new HashSet<>();
+
+    public void addOrder(Orders order) {
+        this.orders.add(order);
+        order.setCustomer(this);
+    }
+
+    public void removeOrder(Orders order) {
+        //order.setOrders(null);
+        this.orders.remove(order);
+    }
+
+    public void removeOrder() {
+        Iterator<Orders> iterator = this.orders.iterator();
+        while (iterator.hasNext()) {
+            //Orders orders =
+            iterator.next();
+            //orders.setOrders(null);
+            iterator.remove();
+        }
+    }
 
     public Long getId() {
         return this.id;
@@ -44,13 +74,12 @@ public class Customer implements Serializable {
         this.customer_address = customer_address;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", customer_name='" + getCustomer_name() + "'" +
-            ", customer_address='" + getCustomer_address() + "'" +
-            "}";
+    public Set<Orders> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<Orders> orders) {
+        this.orders = orders;
     }
 
 }
