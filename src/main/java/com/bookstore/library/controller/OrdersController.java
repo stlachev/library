@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.library.entity.dto.OrdersDTO;
+import com.bookstore.library.entity.dto.OrdersWithCustomerDTO;
 import com.bookstore.library.service.OrdersService;
 
 import jakarta.validation.Valid;
@@ -33,17 +34,17 @@ public class OrdersController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<OrdersDTO>> getAll() throws Exception {
-        List<OrdersDTO> ordersDTOList = ordersService.findAll();
+    public ResponseEntity<List<OrdersWithCustomerDTO>> getAll() throws Exception {
+        List<OrdersWithCustomerDTO> ordersDTOList = ordersService.findAll();
         return ordersDTOList.isEmpty() ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(ordersDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrdersDTO> get(@PathVariable Long id) throws Exception {
-        Optional<OrdersDTO> order = ordersService.get(id);
-        return order.map(orderDTO -> new ResponseEntity<>(orderDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    public ResponseEntity<OrdersWithCustomerDTO> get(@PathVariable Long id) throws Exception {
+        Optional<OrdersWithCustomerDTO> order = ordersService.get(id);
+        return order.map(orderOp -> new ResponseEntity<>(orderOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
@@ -63,7 +64,7 @@ public class OrdersController {
     @DeleteMapping(path="/{id}")
     public ResponseEntity<OrdersDTO> delete(@PathVariable Long id) throws Exception {
         Optional<OrdersDTO> order = ordersService.delete(id);
-        return order.map(ordersDTO -> new ResponseEntity<>(ordersDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        return order.map(orderOp -> new ResponseEntity<>(orderOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 //----------------------

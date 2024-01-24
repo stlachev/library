@@ -3,7 +3,6 @@ package com.bookstore.library.entity.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -13,7 +12,8 @@ public class CustomerDTO {
     private String customer_name;
     private String customer_address;
 
-    @JsonBackReference
+//    @JsonBackReference
+//    @JsonIgnore
     private Set<OrdersDTO> orders = new HashSet<>();
 
     public Long getId() {

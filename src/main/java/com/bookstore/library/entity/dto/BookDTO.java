@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "title")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BookDTO {
     private Long id;
     private String title;
@@ -12,7 +12,6 @@ public class BookDTO {
     private Long qty;
     private float price;
 
-//    @JsonManagedReference
     @JsonIgnore
     private AuthorDTO author;
 

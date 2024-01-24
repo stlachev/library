@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.library.entity.dto.BookDTO;
+import com.bookstore.library.entity.dto.BookWithAuthorsDTO;
 import com.bookstore.library.service.BookService;
 
 import jakarta.validation.Valid;
@@ -32,16 +33,16 @@ public class BookController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<BookDTO>> getAll() throws Exception {
-        List<BookDTO> bookDTOList = bookService.findAll();
+    public ResponseEntity<List<BookWithAuthorsDTO>> getAll() throws Exception {
+        List<BookWithAuthorsDTO> bookDTOList = bookService.findAll();
         return bookDTOList.isEmpty() ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(bookDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookDTO> get(@PathVariable Long id) throws Exception {
-        Optional<BookDTO> book = bookService.get(id);
+    public ResponseEntity<BookWithAuthorsDTO> get(@PathVariable Long id) throws Exception {
+        Optional<BookWithAuthorsDTO> book = bookService.get(id);
         return book.map(bookDTO -> new ResponseEntity<>(bookDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 

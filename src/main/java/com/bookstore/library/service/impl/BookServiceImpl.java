@@ -13,6 +13,7 @@ import com.bookstore.library.entity.Author;
 import com.bookstore.library.entity.Book;
 import com.bookstore.library.entity.dto.AuthorDTO;
 import com.bookstore.library.entity.dto.BookDTO;
+import com.bookstore.library.entity.dto.BookWithAuthorsDTO;
 import com.bookstore.library.repository.AuthorRepository;
 import com.bookstore.library.repository.BookRepository;
 import com.bookstore.library.service.BookService;
@@ -35,18 +36,18 @@ public class BookServiceImpl  implements BookService {
     }
 
     @Override
-    public List<BookDTO> findAll() {
+    public List<BookWithAuthorsDTO> findAll() {
         List<Book> books = bookRepository.findAll();
         return books.stream()
-                .map(book -> modelMapper.map(book, BookDTO.class))
+                .map(book -> modelMapper.map(book, BookWithAuthorsDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<BookDTO> get(@NotNull Long id) {
+    public Optional<BookWithAuthorsDTO> get(@NotNull Long id) {
         Optional<Book> book = bookRepository.findById(id);
         return (book.isPresent()) ?
-                book.map(bookOp -> modelMapper.map(book, BookDTO.class)) :
+                book.map(bookOp -> modelMapper.map(book, BookWithAuthorsDTO.class)) :
                 Optional.empty();
     }
 

@@ -12,7 +12,6 @@ public class AuthorDTO {
     private String name;
     private Integer age;
 
-//    @JsonBackReference
     private Set<BookDTO> books = new HashSet<>();
 
     public Long getAuthor_id() {

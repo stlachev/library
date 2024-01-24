@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bookstore.library.entity.dto.OrdersDTO;
+import com.bookstore.library.entity.dto.OrdersWithCustomerDTO;
 
 import jakarta.validation.constraints.NotNull;
 
 public interface OrdersService {
-
-    public List<OrdersDTO> findAll();
-    public Optional<OrdersDTO> get(@NotNull Long id);
+    
+    public List<OrdersWithCustomerDTO> findAll();
+    public Optional<OrdersWithCustomerDTO> get(@NotNull Long id);
+//    public List<OrdersDTO> findAll();
+//    public Optional<OrdersDTO> get(@NotNull Long id);
     public OrdersDTO create(@NotNull OrdersDTO orderDTO);
     public OrdersDTO update(@NotNull OrdersDTO ordersDTO);
     public Optional<OrdersDTO> delete(@NotNull Long id);

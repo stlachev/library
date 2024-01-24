@@ -4,8 +4,12 @@ public class BookWithAuthorsDTO extends BookDTO {
 
     private AuthorNoBooksDTO author;
 
-    public AuthorDTO getAuthor() {
+    public AuthorNoBooksDTO getNoBooksAuthor() {
         return this.author;
+    }
+
+    public void setNoBooksAuthor(AuthorNoBooksDTO author) {
+        this.author = author;
     }
 
 }

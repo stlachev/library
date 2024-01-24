@@ -4,13 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bookstore.library.entity.dto.BookDTO;
+import com.bookstore.library.entity.dto.BookWithAuthorsDTO;
 
 import jakarta.validation.constraints.NotNull;
 
 public interface BookService {
 
-    public List<BookDTO> findAll();
-    public Optional<BookDTO> get(@NotNull Long id);
+    //public List<BookDTO> findAll();
+    public List<BookWithAuthorsDTO> findAll();
+    public Optional<BookWithAuthorsDTO> get(@NotNull Long id);
     public BookDTO create(@NotNull BookDTO bookDTO);
     public BookDTO update(@NotNull BookDTO bookDTO);
     public Optional<BookDTO> delete(@NotNull Long id);

@@ -14,6 +14,7 @@ import com.bookstore.library.entity.Customer;
 import com.bookstore.library.entity.Orders;
 import com.bookstore.library.entity.OrdersList;
 import com.bookstore.library.entity.dto.OrdersDTO;
+import com.bookstore.library.entity.dto.OrdersWithCustomerDTO;
 import com.bookstore.library.repository.BookRepository;
 import com.bookstore.library.repository.CustomerRepository;
 import com.bookstore.library.repository.OrdersListRepository;
@@ -49,18 +50,18 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public List<OrdersDTO> findAll() {
+    public List<OrdersWithCustomerDTO> findAll() {
         List<Orders> orders = ordersRepository.findAll();
         return orders.stream()
-                .map(orderP -> modelMapper.map(orderP, OrdersDTO.class))
+                .map(orderP -> modelMapper.map(orderP, OrdersWithCustomerDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<OrdersDTO> get(@NotNull Long id) {
+    public Optional<OrdersWithCustomerDTO> get(@NotNull Long id) {
         Optional<Orders> order = ordersRepository.findById(id);
         return (order.isPresent()) ?
-            order.map(orderOp -> modelMapper.map(order, OrdersDTO.class)) :
+            order.map(orderOp -> modelMapper.map(order, OrdersWithCustomerDTO.class)) :
             Optional.empty();
     }
 

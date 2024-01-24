@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -11,7 +12,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public class OrdersDTO {
     private Long id;
 
-//    @JsonIgnore
+    @JsonIgnore
     private CustomerDTO customer;
 
 //    @JsonBackReference
