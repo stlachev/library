@@ -27,7 +27,6 @@ public class Author implements Serializable {
     private int age;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true)
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author", cascade = CascadeType.ALL)
     private Set<Book> books = new HashSet<>();
 
     public void addBook(Book book) {
@@ -42,7 +41,6 @@ public class Author implements Serializable {
 
     public void removeBooks() {
         Iterator<Book> iterator = this.books.iterator();
-
         while (iterator.hasNext()) {
             Book book = iterator.next();
             book.setAuthor(null);

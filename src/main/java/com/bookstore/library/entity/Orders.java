@@ -35,16 +35,19 @@ public class Orders implements Serializable {
 
     public void addOrdersList(OrdersList orders) {
         this.orders.add(orders);
+        orders.setOrder(this);
     }
 
     public void removeOrdersList(OrdersList orders) {
+        orders.setOrder(null);
         this.orders.remove(orders);
     }
 
     public void removeOrdersLists() {
         Iterator<OrdersList> iterator = this.orders.iterator();
         while (iterator.hasNext()) {
-            iterator.next();
+            OrdersList orders = iterator.next();
+            orders.setOrder(null);
             iterator.remove();
         }
     }

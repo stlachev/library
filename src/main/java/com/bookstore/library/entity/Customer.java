@@ -36,16 +36,15 @@ public class Customer implements Serializable {
     }
 
     public void removeOrder(Orders order) {
-        //order.setOrders(null);
+        order.setOrders(null);
         this.orders.remove(order);
     }
 
     public void removeOrder() {
         Iterator<Orders> iterator = this.orders.iterator();
         while (iterator.hasNext()) {
-            //Orders orders =
-            iterator.next();
-            //orders.setOrders(null);
+            Orders orders = iterator.next();
+            orders.setOrders(null);
             iterator.remove();
         }
     }
