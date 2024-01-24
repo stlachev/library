@@ -69,11 +69,6 @@ public class BookServiceImpl  implements BookService {
 
     @Override
     public BookDTO update(@NotNull BookDTO bookDTO) {
-    //    Book book = bookRepository.findById(bookDTO.getId()).orElse(null);
-    //    if (book == null) {
-    //        return null;
-    //    }
-    //    modelMapper.map(bookDTO, book);
         Book book = modelMapper.map(bookDTO, Book.class);
         book = bookRepository.save(book);
         return modelMapper.map(book, BookDTO.class);

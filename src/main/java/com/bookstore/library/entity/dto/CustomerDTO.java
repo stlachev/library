@@ -12,8 +12,6 @@ public class CustomerDTO {
     private String customer_name;
     private String customer_address;
 
-//    @JsonBackReference
-//    @JsonIgnore
     private Set<OrdersDTO> orders = new HashSet<>();
 
     public Long getId() {

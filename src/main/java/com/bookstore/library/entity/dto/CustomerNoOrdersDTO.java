@@ -8,6 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class CustomerNoOrdersDTO extends CustomerDTO {
 
     @JsonIgnore
-    private Set<OrdersWithCustomerDTO> orders = new HashSet<>();
+    private Set<CustomerDTO> orders = new HashSet<>();
 
 }

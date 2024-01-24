@@ -42,7 +42,7 @@ public class AuthorController {
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> get(@PathVariable Long id) throws Exception {
         Optional<AuthorDTO> author = authorService.get(id);
-        return author.map(authorDTO -> new ResponseEntity<>(authorDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        return author.map(authorOp -> new ResponseEntity<>(authorOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
@@ -62,7 +62,7 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<AuthorDTO> delete(@PathVariable Long id) throws Exception {
         Optional<AuthorDTO> author = authorService.delete(id);
-        return author.map(authorDTO -> new ResponseEntity<>(authorDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        return author.map(authorOp -> new ResponseEntity<>(authorOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 //-----------------------------

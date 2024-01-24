@@ -54,11 +54,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO update(@NotNull CustomerDTO customerDTO) {
-    //    Customer customer = customerRepository.findById(customerDTO.getId()).orElse(null);
-    //    if (customer == null) {
-    //        return null;
-    //    }
-    //    modelMapper.map(customerDTO, customer);
         Customer customer = modelMapper.map(customerDTO, Customer.class);
         customer = customerRepository.save(customer);
         return modelMapper.map(customer, CustomerDTO.class);

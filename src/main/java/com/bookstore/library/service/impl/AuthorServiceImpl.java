@@ -54,11 +54,6 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorDTO update(@NotNull AuthorDTO authorDTO) {
-    //    Author author = authorRepository.findById(authorDTO.getAuthor_id()).orElse(null);
-    //    if (author == null) {
-    //       return null;
-    //    }
-    //    modelMapper.map(authorDTO, author);
         Author author = modelMapper.map(authorDTO, Author.class);
         author =authorRepository.save(author);
         return modelMapper.map(author, AuthorDTO.class);

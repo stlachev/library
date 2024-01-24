@@ -1,14 +1,18 @@
 package com.bookstore.library.entity.dto;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class OrdersListDTO {
 
     private Long id;
+
+    @JsonIgnore
     private OrdersDTO order;
-    private BookDTO book;
+
+    private BookWithAuthorsDTO book;
 
     public Long getId() {
         return this.id;
@@ -26,11 +30,12 @@ public class OrdersListDTO {
         this.order = order;
     }
 
-    public BookDTO getBook() {
+    public BookWithAuthorsDTO getBook() {
         return this.book;
     }
 
-    public void setBook(BookDTO book) {
+    public void setBook(BookWithAuthorsDTO book) {
         this.book = book;
     }
+
 }

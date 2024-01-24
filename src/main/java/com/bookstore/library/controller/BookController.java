@@ -43,7 +43,7 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<BookWithAuthorsDTO> get(@PathVariable Long id) throws Exception {
         Optional<BookWithAuthorsDTO> book = bookService.get(id);
-        return book.map(bookDTO -> new ResponseEntity<>(bookDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        return book.map(bookOp -> new ResponseEntity<>(bookOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
@@ -65,7 +65,7 @@ public class BookController {
     @DeleteMapping("/{id}")
     public ResponseEntity<BookDTO> delete(@PathVariable Long id) throws Exception {
         Optional<BookDTO> book = bookService.delete(id);
-        return book.map(bookDTO -> new ResponseEntity<>(bookDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        return book.map(bookOp -> new ResponseEntity<>(bookOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 //-----------------------------

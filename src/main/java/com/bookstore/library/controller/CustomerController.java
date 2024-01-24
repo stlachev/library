@@ -43,7 +43,7 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> get(@PathVariable Long id) throws Exception {
         Optional<CustomerDTO> customer = customerService.get(id);
-        return customer.map(customerDTO -> new ResponseEntity<>(customerDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        return customer.map(customerOp -> new ResponseEntity<>(customerOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
@@ -63,7 +63,7 @@ public class CustomerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomerDTO> delete(@PathVariable Long id) throws Exception {
         Optional<CustomerDTO> customer = customerService.delete(id);
-        return customer.map(customerDTO -> new ResponseEntity<>(customerDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        return customer.map(customerOp -> new ResponseEntity<>(customerOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 //-------------------------------------------

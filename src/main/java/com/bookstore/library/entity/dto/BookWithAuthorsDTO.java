@@ -1,14 +1,17 @@
 package com.bookstore.library.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BookWithAuthorsDTO extends BookDTO {
 
+    @JsonIgnore
     private AuthorNoBooksDTO author;
 
-    public AuthorNoBooksDTO getNoBooksAuthor() {
+    public AuthorNoBooksDTO getBookAuthor() {
         return this.author;
     }
 
-    public void setNoBooksAuthor(AuthorNoBooksDTO author) {
+    public void setBookAuthor(AuthorNoBooksDTO author) {
         this.author = author;
     }
 

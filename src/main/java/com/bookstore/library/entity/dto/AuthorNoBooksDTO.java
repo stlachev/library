@@ -8,6 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class AuthorNoBooksDTO extends AuthorDTO {
 
     @JsonIgnore
-    private Set<BookWithAuthorsDTO> books = new HashSet<>();
+    private Set<AuthorDTO> books = new HashSet<>();
 
 }
