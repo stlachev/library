@@ -29,9 +29,6 @@ public class Book implements Serializable {
     @JoinColumn(name = "author_id")
     private Author author;
 
-//    @OneToMany (cascade = CascadeType.ALL, mappedBy = "book")
-//    private Set<OrdersList> orders = new HashSet<>();
-
     public Long getId() {
         return id;
     }
@@ -78,6 +75,18 @@ public class Book implements Serializable {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", title='" + getTitle() + "'" +
+            ", genre='" + getGenre() + "'" +
+            ", qty='" + getQty() + "'" +
+            ", price='" + getPrice() + "'" +
+            "}";
     }
 
 }
