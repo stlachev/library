@@ -47,69 +47,69 @@ public class BookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<BookDTO> create(@Valid @RequestBody BookDTO bookDTO) throws ServerException {
-        BookDTO createdBookDTO = bookService.create(bookDTO);
+    public ResponseEntity<BookWithAuthorsDTO> create(@Valid @RequestBody BookDTO bookDTO) throws ServerException {
+        BookWithAuthorsDTO createdBookDTO = bookService.create(bookDTO);
         return (createdBookDTO == null) ?
             new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<>(createdBookDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("")
-    public ResponseEntity<BookDTO> update(@Valid @RequestBody BookDTO bookDTO) throws Exception {
-        BookDTO updatedBookDTO = bookService.update(bookDTO);
+    public ResponseEntity<BookWithAuthorsDTO> update(@Valid @RequestBody BookDTO bookDTO) throws Exception {
+        BookWithAuthorsDTO updatedBookDTO = bookService.update(bookDTO);
         return (updatedBookDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(updatedBookDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BookDTO> delete(@PathVariable Long id) throws Exception {
-        Optional<BookDTO> book = bookService.delete(id);
+    public ResponseEntity<BookWithAuthorsDTO> delete(@PathVariable Long id) throws Exception {
+        Optional<BookWithAuthorsDTO> book = bookService.delete(id);
         return book.map(bookOp -> new ResponseEntity<>(bookOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 //-----------------------------
 
     @GetMapping("/title/{title}")
-    public ResponseEntity<List<BookDTO>> findByTitle(@PathVariable String title)  throws Exception {
-        List<BookDTO> bookDTOList = bookService.findByTitle(title);
+    public ResponseEntity<List<BookWithAuthorsDTO>> findByTitle(@PathVariable String title)  throws Exception {
+        List<BookWithAuthorsDTO> bookDTOList = bookService.findByTitle(title);
         return bookDTOList.isEmpty() ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(bookDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity<List<BookDTO>> findByAuthor(@PathVariable Long id)  throws Exception {
-        List<BookDTO> bookDTOList = bookService.findByAuthor(id);
+    public ResponseEntity<List<BookWithAuthorsDTO>> findByAuthor(@PathVariable Long id)  throws Exception {
+        List<BookWithAuthorsDTO> bookDTOList = bookService.findByAuthor(id);
         return bookDTOList.isEmpty() ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(bookDTOList, HttpStatus.OK);
     }
 
     @PutMapping("/setauthor/{id}")
-    public ResponseEntity<BookDTO> setAuthor(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws ServerException {
-        BookDTO updatedBookDTO = bookService.setAuthor(id, bookDTO);
+    public ResponseEntity<BookWithAuthorsDTO> setAuthor(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws ServerException {
+        BookWithAuthorsDTO updatedBookDTO = bookService.setAuthor(id, bookDTO);
         return (updatedBookDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(updatedBookDTO, HttpStatus.OK);
     }
 
     @PostMapping("/createwithauthorid/{id}")
-    public ResponseEntity<BookDTO> createBookWithAuthorId(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws ServerException {
+    public ResponseEntity<BookWithAuthorsDTO> createBookWithAuthorId(@PathVariable Long id, @Valid @RequestBody BookDTO bookDTO) throws ServerException {
         return new ResponseEntity<>(bookService.createBookWithAuthorId(id ,bookDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/deletebookauthor/{id}")
-    public ResponseEntity<BookDTO> deleteBookAuthor(@PathVariable Long id) throws Exception {
-        BookDTO bookDTO = bookService.deleteBookAuthor(id);
+    public ResponseEntity<BookWithAuthorsDTO> deleteBookAuthor(@PathVariable Long id) throws Exception {
+        BookWithAuthorsDTO bookDTO = bookService.deleteBookAuthor(id);
         return (bookDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(bookDTO, HttpStatus.OK);
     }
 
     @PostMapping("/deletebookbytitle/{title}")
-    public ResponseEntity<BookDTO> deleteBookByTitle(@PathVariable String title) throws Exception {
-        BookDTO bookDTO = bookService.deleteBookByTitle(title);
+    public ResponseEntity<BookWithAuthorsDTO> deleteBookByTitle(@PathVariable String title) throws Exception {
+        BookWithAuthorsDTO bookDTO = bookService.deleteBookByTitle(title);
         return (bookDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(bookDTO, HttpStatus.OK);

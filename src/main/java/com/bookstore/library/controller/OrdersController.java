@@ -48,38 +48,39 @@ public class OrdersController {
     }
 
     @PostMapping("")
-    public ResponseEntity<OrdersDTO> create(@Valid @RequestBody OrdersDTO ordersDTO) throws ServerException {
-        OrdersDTO createdOrdersDTO = ordersService.create(ordersDTO);
+    public ResponseEntity<OrdersWithCustomerDTO> create(@Valid @RequestBody OrdersDTO ordersDTO) throws ServerException {
+        OrdersWithCustomerDTO createdOrdersDTO = ordersService.create(ordersDTO);
         return new ResponseEntity<>(createdOrdersDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("")
-    public ResponseEntity<OrdersDTO> update(@Valid @RequestBody OrdersDTO ordersDTO) throws Exception {
-        OrdersDTO updatedOrdersDTO = ordersService.update(ordersDTO);
+    public ResponseEntity<OrdersWithCustomerDTO> update(@Valid @RequestBody OrdersDTO ordersDTO) throws Exception {
+        OrdersWithCustomerDTO updatedOrdersDTO = ordersService.update(ordersDTO);
         return (updatedOrdersDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(updatedOrdersDTO, HttpStatus.OK);
     }
 
     @DeleteMapping(path="/{id}")
-    public ResponseEntity<OrdersDTO> delete(@PathVariable Long id) throws Exception {
-        Optional<OrdersDTO> order = ordersService.delete(id);
+    public ResponseEntity<OrdersWithCustomerDTO> delete(@PathVariable Long id) throws Exception {
+        Optional<OrdersWithCustomerDTO> order = ordersService.delete(id);
         return order.map(orderOp -> new ResponseEntity<>(orderOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 //----------------------
 
     @PutMapping("/customer/{id}")
-    public ResponseEntity<OrdersDTO> updateCustomer(@PathVariable Long id, @Valid @RequestBody OrdersDTO orderDTO) throws Exception {
-        OrdersDTO updatedOrdersDTO = ordersService.updateCustomer(id, orderDTO);
+    public ResponseEntity<OrdersWithCustomerDTO> updateCustomer(@PathVariable Long id, @Valid @RequestBody OrdersDTO orderDTO) throws Exception {
+        OrdersWithCustomerDTO updatedOrdersDTO = ordersService.updateCustomer(id, orderDTO);
         return (updatedOrdersDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(updatedOrdersDTO, HttpStatus.OK);
     }
 
     @PutMapping("/add/{id}")
-    public ResponseEntity<OrdersDTO> addBook(@PathVariable Long id, @Valid @RequestBody OrdersDTO orderDTO) throws Exception {
-        OrdersDTO updatedOrdersDTO = ordersService.addBook(id, orderDTO);
+//    @PostMapping("/add/{id}")
+    public ResponseEntity<OrdersWithCustomerDTO> addBook(@PathVariable Long id, @Valid @RequestBody OrdersDTO orderDTO) throws Exception {
+        OrdersWithCustomerDTO updatedOrdersDTO = ordersService.addBook(id, orderDTO);
         return (updatedOrdersDTO == null) ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(updatedOrdersDTO, HttpStatus.OK);

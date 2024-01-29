@@ -38,7 +38,12 @@ public class OrdersDTO {
     }
 
     public void setOrders(Set<OrdersListDTO> orders) {
-        this.orders = orders;
+        this.orders =  orders;
+    }
+
+    public void addOrders(OrdersListDTO orders) {
+        this.orders.add(orders);
+        orders.setOrder(this);
     }
 
 }

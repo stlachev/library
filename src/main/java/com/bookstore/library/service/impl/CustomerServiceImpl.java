@@ -1,7 +1,9 @@
 package com.bookstore.library.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -10,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bookstore.library.entity.Customer;
+import com.bookstore.library.entity.Orders;
 import com.bookstore.library.entity.dto.CustomerDTO;
 import com.bookstore.library.repository.CustomerRepository;
+import com.bookstore.library.repository.OrdersRepository;
 import com.bookstore.library.service.CustomerService;
 
 import jakarta.validation.constraints.NotNull;
@@ -22,10 +26,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private final CustomerRepository customerRepository;
+    private final OrdersRepository ordersRepository;
     private final ModelMapper modelMapper;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+            OrdersRepository ordersRepository,
+            ModelMapper modelMapper) {
         this.customerRepository = customerRepository;
+        this.ordersRepository = ordersRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -55,6 +63,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO update(@NotNull CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
+        Set<Orders> customerOrders = new HashSet<>(ordersRepository.findOrdersByCustomerId(customerDTO.getId()));
+        customer.setOrders(customerOrders);
         customer = customerRepository.save(customer);
         return modelMapper.map(customer, CustomerDTO.class);
     }

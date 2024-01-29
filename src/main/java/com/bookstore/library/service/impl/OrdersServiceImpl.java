@@ -13,7 +13,9 @@ import com.bookstore.library.entity.Book;
 import com.bookstore.library.entity.Customer;
 import com.bookstore.library.entity.Orders;
 import com.bookstore.library.entity.OrdersList;
+import com.bookstore.library.entity.dto.CustomerDTO;
 import com.bookstore.library.entity.dto.OrdersDTO;
+import com.bookstore.library.entity.dto.OrdersListDTO;
 import com.bookstore.library.entity.dto.OrdersWithCustomerDTO;
 import com.bookstore.library.repository.BookRepository;
 import com.bookstore.library.repository.CustomerRepository;
@@ -63,59 +65,75 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public OrdersDTO create(@NotNull OrdersDTO orderDTO) {
+    public OrdersWithCustomerDTO create(@NotNull OrdersDTO orderDTO) {
         Orders order = modelMapper.map(orderDTO, Orders.class);
         Orders orderNew = ordersRepository.save(order);
-        return modelMapper.map(orderNew, OrdersDTO.class);
+        return modelMapper.map(orderNew, OrdersWithCustomerDTO.class);
     }
 
     @Override
-    public OrdersDTO update(@NotNull OrdersDTO orderDTO) {
+    public OrdersWithCustomerDTO update(@NotNull OrdersDTO orderDTO) {
         Orders order = modelMapper.map(orderDTO, Orders.class);
+        Optional<Orders> customerOrder = ordersRepository.findById(orderDTO.getId());
+        order.setOrders(customerOrder.get().getOrders());
         order = ordersRepository.save(order);
-        return modelMapper.map(order, OrdersDTO.class);
+        return modelMapper.map(order, OrdersWithCustomerDTO.class);
     }
 
     @Override
-    public Optional<OrdersDTO> delete(@NotNull Long id) {
+    public Optional<OrdersWithCustomerDTO> delete(@NotNull Long id) {
         Optional<Orders> order =  ordersRepository.findById(id);
         if (!order.isPresent()) {
             return Optional.empty();
         }
         ordersRepository.deleteById(id);
-        return order.map(orderOp -> modelMapper.map(order, OrdersDTO.class));
+        return order.map(orderOp -> modelMapper.map(order, OrdersWithCustomerDTO.class));
     }
 
 //--------------------------------------------------
 
     @Override
-    public OrdersDTO updateCustomer(@NotNull Long id, @NotNull OrdersDTO orderDTO) {
-        Orders order = modelMapper.map(orderDTO, Orders.class);
+    public OrdersWithCustomerDTO updateCustomer(@NotNull Long id, @NotNull OrdersDTO orderDTO) {
+        Optional<Orders> order = ordersRepository.findById(orderDTO.getId());
+        if (!order.isPresent())
+            return null;
         Optional<Customer> customer = customerRepository.findById(id);
         if (!customer.isPresent()) {
             return null;
         }
-        order.setCustomer(customer.get());
-        Orders orderNew = ordersRepository.save(order);
-        return modelMapper.map(orderNew, OrdersDTO.class);
+        OrdersWithCustomerDTO oOrderDTO= modelMapper.map(order, OrdersWithCustomerDTO.class);
+        CustomerDTO oCustomerDTO = modelMapper.map(customer, CustomerDTO.class);
+        oOrderDTO.setCustomer(oCustomerDTO);
+        Orders orderNew = ordersRepository.save(modelMapper.map(oOrderDTO, Orders.class));
+        return modelMapper.map(orderNew, OrdersWithCustomerDTO.class);
     }
 
     @Override
-    public OrdersDTO addBook(@NotNull Long id, @NotNull OrdersDTO orderDTO) {
-        Orders order = modelMapper.map(orderDTO, Orders.class);
+    public OrdersWithCustomerDTO addBook(@NotNull Long id, @NotNull OrdersDTO orderDTO) {
+        Optional<Orders> order = ordersRepository.findById(orderDTO.getId());
+        if (!order.isPresent())
+            return null;
         Optional<Book> book = bookRepository.findById(id);
         if (!book.isPresent()) {
             return null;
         }
-        OrdersList ordersList = ordersListRepository.findByOrderId(orderDTO.getId());
-        if (ordersList == null) {
-            ordersList= new OrdersList();
+        
+        OrdersDTO ordersDTO = modelMapper.map(order, OrdersDTO.class);
+/*        Set<OrdersListDTO> setOrdersListDTO;
+        if (ordersDTO.getOrders() == null) {
+            setOrdersListDTO = new HashSet<>();
+            ordersDTO.setOrders(setOrdersListDTO);
         }
+        setOrdersListDTO = ordersDTO.getOrders();
+*/
+        OrdersList ordersList = new OrdersList();
         ordersList.setBook(book.get());
-        ordersList.setOrder(order);
+        ordersList.setOrder(order.get());
         ordersList = ordersListRepository.save(ordersList);
-        order.addOrdersList(ordersList);
-        Orders orderNew = ordersRepository.save(order);
-        return modelMapper.map(orderNew, OrdersDTO.class);
+        System.out.println("book: " + book.get().getId() + ", order: " + order.get().getId());
+        OrdersListDTO orderListDTO = modelMapper.map(ordersList, OrdersListDTO.class);
+        ordersDTO.addOrders(orderListDTO);
+        Orders orderNew = ordersRepository.save(modelMapper.map(ordersDTO, Orders.class));
+        return modelMapper.map(orderNew, OrdersWithCustomerDTO.class);
     }
 }

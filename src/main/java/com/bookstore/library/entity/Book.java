@@ -29,6 +29,9 @@ public class Book implements Serializable {
     @JoinColumn(name = "author_id")
     private Author author;
 
+//    @OneToMany (cascade = CascadeType.ALL, mappedBy = "book")
+//    private Set<OrdersList> orders = new HashSet<>();
+
     public Long getId() {
         return id;
     }

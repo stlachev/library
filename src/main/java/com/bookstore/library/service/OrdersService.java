@@ -12,12 +12,10 @@ public interface OrdersService {
     
     public List<OrdersWithCustomerDTO> findAll();
     public Optional<OrdersWithCustomerDTO> get(@NotNull Long id);
-//    public List<OrdersDTO> findAll();
-//    public Optional<OrdersDTO> get(@NotNull Long id);
-    public OrdersDTO create(@NotNull OrdersDTO orderDTO);
-    public OrdersDTO update(@NotNull OrdersDTO ordersDTO);
-    public Optional<OrdersDTO> delete(@NotNull Long id);
+    public OrdersWithCustomerDTO create(@NotNull OrdersDTO orderDTO);
+    public OrdersWithCustomerDTO update(@NotNull OrdersDTO ordersDTO);
+    public Optional<OrdersWithCustomerDTO> delete(@NotNull Long id);
 
-    public OrdersDTO updateCustomer(@NotNull Long id, @NotNull OrdersDTO orderDTO);
-    public OrdersDTO addBook(@NotNull Long id, @NotNull OrdersDTO orderDTO);
+    public OrdersWithCustomerDTO updateCustomer(@NotNull Long id, @NotNull OrdersDTO orderDTO);
+    public OrdersWithCustomerDTO addBook(@NotNull Long id, @NotNull OrdersDTO orderDTO);
 }

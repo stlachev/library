@@ -12,8 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,19 +26,19 @@ public class Orders implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_fk", referencedColumnName="id")
     private Customer customer;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
     private Set<OrdersList> orders = new HashSet<>();
 
-    public void addOrdersList(OrdersList orders) {
+    public void addOrders(OrdersList orders) {
         this.orders.add(orders);
         orders.setOrder(this);
     }
 
-    public void removeOrdersList(OrdersList orders) {
+    public void removeOrders(OrdersList orders) {
         orders.setOrder(null);
         this.orders.remove(orders);
     }
