@@ -49,18 +49,30 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    @Transactional(readOnly= true)
     public List<OrdersWithCustomerDTO> findAll() {
         List<Orders> orders = ordersRepository.findAll();
+/*
+        Set<OrdersList> _orders = new HashSet<OrdersList>();
+        for(Orders _order: orders) {
+            _orders.addAll(_order.getOrders());
+            Set<OrdersList> ol = _order.getOrders();
+            for (OrdersList _o : ol) {
+                System.out.println(_o.getBook().getTitle());
+            }
+        }
+*/
         return orders.stream()
-                .map(orderP -> modelMapper.map(orderP, OrdersWithCustomerDTO.class))
+                .map(orderOp -> modelMapper.map(orderOp, OrdersWithCustomerDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly= true)
     public Optional<OrdersWithCustomerDTO> get(@NotNull Long id) {
         Optional<Orders> order = ordersRepository.findById(id);
         return (order.isPresent()) ?
-            order.map(orderOp -> modelMapper.map(order, OrdersWithCustomerDTO.class)) :
+            order.map(orderOp -> modelMapper.map(orderOp, OrdersWithCustomerDTO.class)) :
             Optional.empty();
     }
 
@@ -75,6 +87,9 @@ public class OrdersServiceImpl implements OrdersService {
     public OrdersWithCustomerDTO update(@NotNull OrdersDTO orderDTO) {
         Orders order = modelMapper.map(orderDTO, Orders.class);
         Optional<Orders> customerOrder = ordersRepository.findById(orderDTO.getId());
+        if (!customerOrder.isPresent()) {
+            return null;
+        }
         order.setOrders(customerOrder.get().getOrders());
         order = ordersRepository.save(order);
         return modelMapper.map(order, OrdersWithCustomerDTO.class);
@@ -117,15 +132,7 @@ public class OrdersServiceImpl implements OrdersService {
         if (!book.isPresent()) {
             return null;
         }
-        
         OrdersDTO ordersDTO = modelMapper.map(order, OrdersDTO.class);
-/*        Collection<OrdersListDTO> setOrdersListDTO;
-        if (ordersDTO.getOrders() == null) {
-            setOrdersListDTO = new HashSet<OrdersListDTO>();
-            ordersDTO.setOrders(setOrdersListDTO);
-        }
-        setOrdersListDTO = ordersDTO.getOrders();
-*/
         OrdersList ordersList = new OrdersList();
         ordersList.setBook(book.get());
         ordersList.setOrder(order.get());

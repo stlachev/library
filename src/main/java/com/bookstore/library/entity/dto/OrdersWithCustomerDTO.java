@@ -1,4 +1,7 @@
 package com.bookstore.library.entity.dto;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class OrdersWithCustomerDTO extends OrdersDTO {
@@ -12,6 +15,17 @@ public class OrdersWithCustomerDTO extends OrdersDTO {
 
     public void setOrderCustomer(CustomerNoOrdersDTO customer) {
         this.customer = customer;
+    }
+
+
+    protected Set<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
+
+    public Set<OrdersListDTO> getOrders() {
+        return this.orders;
+    }
+
+    public void setOrders(Set<OrdersListDTO> orders) {
+        this.orders = orders;
     }
 
 }

@@ -2,6 +2,11 @@ package com.bookstore.library.entity;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,10 +26,14 @@ public class OrdersList implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @BatchSize(size=10)
+    @Fetch(FetchMode.JOIN)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName="id")
     private Orders order;
 
+    @BatchSize(size=10)
+    @Fetch(FetchMode.JOIN)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", referencedColumnName="id")
     private Book book;
@@ -37,6 +46,7 @@ public class OrdersList implements Serializable {
         this.id = id;
     }
 
+    @Transactional(readOnly= true)
     public Orders getOrder() {
         return this.order;
     }
@@ -45,6 +55,7 @@ public class OrdersList implements Serializable {
         this.order = order;
     }
 
+    @Transactional(readOnly= true)
     public Book getBook() {
         return this.book;
     }
@@ -52,14 +63,13 @@ public class OrdersList implements Serializable {
     public void setBook(Book book) {
         this.book = book;
     }
-
+/*
     @Override
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
             ", order='" + getOrder() + "'" +
-            ", book='" + getBook() + "'" +
             "}";
     }
-
+*/
 }

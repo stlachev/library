@@ -1,9 +1,9 @@
 package com.bookstore.library.service.impl;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -32,6 +32,7 @@ public class OrdersListServiceImpl implements OrdersListService{
         this.modelMapper = modelMapper;
     }
 
+    @Transactional(readOnly= true)
     @Override
     public List<OrdersListDTO> findAll() {
         List<OrdersList> ordersList = ordersListRepository.findAll();
@@ -40,6 +41,7 @@ public class OrdersListServiceImpl implements OrdersListService{
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly= true)
     @Override
     public Optional<OrdersListDTO> get(@NotNull Long id) {
         Optional<OrdersList> ordersList = ordersListRepository.findById(id);
@@ -74,10 +76,11 @@ public class OrdersListServiceImpl implements OrdersListService{
 
 //------------------------------------
 
+    @Transactional(readOnly= true)
     @Override
-    public Collection<OrdersListDTO> findByOrderId(@NotNull Long id) {
+    public Set<OrdersListDTO> findByOrderId(@NotNull Long id) {
         List<OrdersList> ordersList = ordersListRepository.findByOrderId(id);
-        Collection<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
+        Set<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
         if (ordersList == null || ordersList.isEmpty()) {
             return orders;
         }

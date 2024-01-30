@@ -30,6 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional(readOnly= true)
     public List<AuthorDTO> findAll() {
         List<Author> authors = authorRepository.findAll();
         return authors.stream()
@@ -38,6 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional(readOnly= true)
     public Optional<AuthorDTO> get(@NotNull Long id) {
         Optional<Author> author = authorRepository.findById(id);
         return (author.isPresent()) ?
@@ -72,6 +74,7 @@ public class AuthorServiceImpl implements AuthorService {
 //-------------------------------
 
     @Override
+    @Transactional(readOnly= true)
     public List<AuthorDTO> findByName(@NotNull String authorName) {
         List<Author> authors = authorRepository.findByName(authorName);
         return authors.stream()

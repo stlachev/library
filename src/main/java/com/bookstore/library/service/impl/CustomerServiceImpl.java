@@ -1,9 +1,9 @@
 package com.bookstore.library.service.impl;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -37,6 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
         this.modelMapper = modelMapper;
     }
 
+    @Transactional(readOnly= true)
     @Override
     public List<CustomerDTO> findAll() {
         List<Customer> customers = customerRepository.findAll();
@@ -44,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(customer -> modelMapper.map(customer, CustomerDTO.class))
                 .collect(Collectors.toList());
     }
-
+    @Transactional(readOnly= true)
     @Override
     public Optional<CustomerDTO> get(@NotNull Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
@@ -63,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO update(@NotNull CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-        Collection<Orders> customerOrders = new HashSet<Orders>(ordersRepository.findOrdersByCustomerId(customerDTO.getId()));
+        Set<Orders> customerOrders = new HashSet<Orders>(ordersRepository.findOrdersByCustomerId(customerDTO.getId()));
         customer.setOrders(customerOrders);
         customer = customerRepository.save(customer);
         return modelMapper.map(customer, CustomerDTO.class);
@@ -81,6 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 //------------------------
 
+    @Transactional(readOnly= true)
     @Override
     public List<CustomerDTO> findByName(@NotNull String name) {
         List<Customer> customers = customerRepository.findByName(name);

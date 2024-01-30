@@ -1,9 +1,14 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,11 +28,13 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String customer_name;
-    String customer_address;
+    private String customer_name;
+    private String customer_address;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.ALL)
-    private Collection<Orders> orders = new HashSet<Orders>();
+    @BatchSize(size=10)
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Orders> orders = new HashSet<Orders>();
 
     public void addOrder(Orders order) {
         this.orders.add(order);
@@ -48,6 +55,7 @@ public class Customer implements Serializable {
         }
     }
 
+    @Transactional(readOnly= true)
     public Long getId() {
         return this.id;
     }
@@ -56,6 +64,7 @@ public class Customer implements Serializable {
         this.id = id;
     }
 
+    @Transactional(readOnly= true)
     public String getCustomer_name() {
         return this.customer_name;
     }
@@ -64,6 +73,7 @@ public class Customer implements Serializable {
         this.customer_name = customer_name;
     }
 
+    @Transactional(readOnly= true)
     public String getCustomer_address() {
         return this.customer_address;
     }
@@ -72,14 +82,15 @@ public class Customer implements Serializable {
         this.customer_address = customer_address;
     }
 
-    public Collection<Orders> getOrders() {
+    @Transactional(readOnly= true)
+    public Set<Orders> getOrders() {
         return this.orders;
     }
 
-    public void setOrders(Collection<Orders> orders) {
+    public void setOrders(Set<Orders> orders) {
         this.orders = orders;
     }
-
+/*
     @Override
     public String toString() {
         return "{" +
@@ -89,5 +100,5 @@ public class Customer implements Serializable {
             ", orders='" + getOrders() + "'" +
             "}";
     }
-
+*/
 }

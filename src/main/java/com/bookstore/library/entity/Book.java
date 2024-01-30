@@ -2,6 +2,11 @@ package com.bookstore.library.entity;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,10 +30,13 @@ public class Book implements Serializable {
     private Long qty;
     private float price;
 
+    @BatchSize(size=10)
+    @Fetch(FetchMode.JOIN)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private Author author;
 
+    @Transactional(readOnly= true)
     public Long getId() {
         return id;
     }
@@ -37,6 +45,7 @@ public class Book implements Serializable {
         this.id = id;
     }
 
+    @Transactional(readOnly= true)
     public String getTitle() {
         return title;
     }
@@ -45,10 +54,16 @@ public class Book implements Serializable {
         this.title = title;
     }
 
+    @Transactional(readOnly= true)
     public String getGenre() {
         return genre;
     }
 
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    @Transactional(readOnly= true)
     public Long getQty() {
         return this.qty;
     }
@@ -57,6 +72,7 @@ public class Book implements Serializable {
         this.qty = qty;
     }
 
+    @Transactional(readOnly= true)
     public float getPrice() {
         return this.price;
     }
@@ -65,10 +81,7 @@ public class Book implements Serializable {
         this.price = price;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
+    @Transactional(readOnly= true)
     public Author getAuthor() {
         return author;
     }
@@ -77,7 +90,7 @@ public class Book implements Serializable {
         this.author = author;
     }
 
-
+/*
     @Override
     public String toString() {
         return "{" +
@@ -88,5 +101,5 @@ public class Book implements Serializable {
             ", price='" + getPrice() + "'" +
             "}";
     }
-
+*/
 }

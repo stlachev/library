@@ -1,12 +1,18 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,8 +32,10 @@ public class Author implements Serializable {
     private String name;
     private int age;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true)
-    private Collection<Book> books = new HashSet<Book>();
+    @BatchSize(size=10)
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Book> books = new HashSet<Book>();
 
     public void addBook(Book book) {
         this.books.add(book);
@@ -48,6 +56,7 @@ public class Author implements Serializable {
         }
     }
 
+    @Transactional(readOnly= true)
     public Long getAuthor_id() {
         return author_id;
     }
@@ -56,6 +65,7 @@ public class Author implements Serializable {
         this.author_id = author_id;
     }
 
+    @Transactional(readOnly= true)
     public String getName() {
         return name;
     }
@@ -64,6 +74,7 @@ public class Author implements Serializable {
         this.name = name;
     }
 
+    @Transactional(readOnly= true)
     public int getAge() {
         return age;
     }
@@ -72,14 +83,15 @@ public class Author implements Serializable {
         this.age = age;
     }
 
-    public Collection<Book> getBooks() {
+    @Transactional(readOnly= true)
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Collection<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
-
+/*
     @Override
     public String toString() {
         return "{" +
@@ -89,5 +101,5 @@ public class Author implements Serializable {
             ", books='" + getBooks() + "'" +
             "}";
     }
-
+*/
 }
