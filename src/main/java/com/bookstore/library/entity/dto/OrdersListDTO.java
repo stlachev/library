@@ -48,12 +48,11 @@ public class OrdersListDTO {
         this.book = book;
     }
 */
-
     @Override
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
-            ", order='" + getOrder().toString() + "'" +
+            ", order='" + getOrder() + "'" +
             ", book='" + getBook() + "'" +
             "}";
     }

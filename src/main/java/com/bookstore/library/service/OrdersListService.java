@@ -1,5 +1,6 @@
 package com.bookstore.library.service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,5 +15,5 @@ public interface OrdersListService {
     public OrdersListDTO update(@NotNull OrdersListDTO ordersListDTO);
     public Optional<OrdersListDTO> delete(@NotNull Long id);
 
-    public List<OrdersListDTO> findByOrderId(@NotNull Long id);
+    public Collection<OrdersListDTO> findByOrderId(@NotNull Long id);
 }

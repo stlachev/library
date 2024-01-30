@@ -53,7 +53,6 @@ public class AuthorDTO {
             " author_id='" + getAuthor_id() + "'" +
             ", name='" + getName() + "'" +
             ", age='" + getAge() + "'" +
-            ", books='" + getBooks() + "'" +
             "}";
     }
 

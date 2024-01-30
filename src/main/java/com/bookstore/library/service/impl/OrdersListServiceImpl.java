@@ -1,5 +1,7 @@
 package com.bookstore.library.service.impl;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bookstore.library.entity.Book;
 import com.bookstore.library.entity.OrdersList;
 import com.bookstore.library.entity.dto.OrdersListDTO;
 import com.bookstore.library.repository.OrdersListRepository;
@@ -35,7 +36,7 @@ public class OrdersListServiceImpl implements OrdersListService{
     public List<OrdersListDTO> findAll() {
         List<OrdersList> ordersList = ordersListRepository.findAll();
         return ordersList.stream()
-                .map(orderP -> modelMapper.map(orderP, OrdersListDTO.class))
+                .map(orderOp -> modelMapper.map(orderOp, OrdersListDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -43,7 +44,7 @@ public class OrdersListServiceImpl implements OrdersListService{
     public Optional<OrdersListDTO> get(@NotNull Long id) {
         Optional<OrdersList> ordersList = ordersListRepository.findById(id);
         return (ordersList.isPresent()) ?
-            ordersList.map(orderP -> modelMapper.map(ordersList, OrdersListDTO.class)) :
+            ordersList.map(orderOp -> modelMapper.map(ordersList, OrdersListDTO.class)) :
             Optional.empty();
     }
 
@@ -68,33 +69,21 @@ public class OrdersListServiceImpl implements OrdersListService{
             return Optional.empty();
         }
         ordersListRepository.deleteById(id);
-        return ordersList.map(orderP -> modelMapper.map(ordersList, OrdersListDTO.class));
+        return ordersList.map(orderOp -> modelMapper.map(ordersList, OrdersListDTO.class));
     }
 
 //------------------------------------
 
     @Override
-    public List<OrdersListDTO> findByOrderId(@NotNull Long id) {
+    public Collection<OrdersListDTO> findByOrderId(@NotNull Long id) {
         List<OrdersList> ordersList = ordersListRepository.findByOrderId(id);
-
-        if (ordersList.isEmpty()) {
-            return null;
+        Collection<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
+        if (ordersList == null || ordersList.isEmpty()) {
+            return orders;
         }
         for (OrdersList _order : ordersList) {
-//            System.out.println(_order.toString());
-            if (_order == null) {
-                System.out.println("NULL");
-            }
-
-            Book b =_order.getBook();
-            if (b != null)
-                System.out.println(b.toString());
-            
+            orders.add(modelMapper.map(_order, OrdersListDTO.class));
         }
-//      OrdersListDTO ordersListDTO = modelMapper.map(orders, OrdersListDTO.class);
-//      ordersListDTO.
-        return ordersList.stream()
-            .map(orderP -> modelMapper.map(ordersList, OrdersListDTO.class))
-            .collect(Collectors.toList());
+        return orders;
     }
 }

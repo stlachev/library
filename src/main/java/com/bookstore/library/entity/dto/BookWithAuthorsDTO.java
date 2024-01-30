@@ -15,4 +15,16 @@ public class BookWithAuthorsDTO extends BookDTO {
         this.author = author;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", title='" + getTitle() + "'" +
+            ", genre='" + getGenre() + "'" +
+            ", qty='" + getQty() + "'" +
+            ", price='" + getPrice() + "'" +
+            ", author='" + getAuthor() + "'" +
+            "}";
+    }
+
 }

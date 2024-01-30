@@ -71,7 +71,6 @@ public class BookDTO {
             ", genre='" + getGenre() + "'" +
             ", qty='" + getQty() + "'" +
             ", price='" + getPrice() + "'" +
-            ", author='" + getAuthor() + "'" +
             "}";
     }
 
