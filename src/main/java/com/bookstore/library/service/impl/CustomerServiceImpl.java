@@ -1,9 +1,9 @@
 package com.bookstore.library.service.impl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -63,7 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO update(@NotNull CustomerDTO customerDTO) {
         Customer customer = modelMapper.map(customerDTO, Customer.class);
-        Set<Orders> customerOrders = new HashSet<>(ordersRepository.findOrdersByCustomerId(customerDTO.getId()));
+        Collection<Orders> customerOrders = new HashSet<Orders>(ordersRepository.findOrdersByCustomerId(customerDTO.getId()));
         customer.setOrders(customerOrders);
         customer = customerRepository.save(customer);
         return modelMapper.map(customer, CustomerDTO.class);

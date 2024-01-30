@@ -62,17 +62,17 @@ public class OrdersListController {
 
     @DeleteMapping(path="/{id}")
     public ResponseEntity<OrdersListDTO> delete(@PathVariable Long id) throws Exception {
-        Optional<OrdersListDTO> orderList = ordersListService.delete(id);
-        return orderList.map(orderOp -> new ResponseEntity<>(orderOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+        Optional<OrdersListDTO> order = ordersListService.delete(id);
+        return order.map(orderOp -> new ResponseEntity<>(orderOp, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
 //-----------------------------------
     @GetMapping("/order/{id}")
     public ResponseEntity<List<OrdersListDTO>> findByOrderId(@PathVariable Long id) throws Exception {
-        List<OrdersListDTO> ordersDTO = ordersListService.findByOrderId(id);
-        return ordersDTO.isEmpty() ?
+        List<OrdersListDTO> ordersListDTO = ordersListService.findByOrderId(id);
+        return ordersListDTO.isEmpty() ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-            new ResponseEntity<>(ordersDTO, HttpStatus.OK);
+            new ResponseEntity<>(ordersListDTO, HttpStatus.OK);
     }
 
 }

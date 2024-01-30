@@ -1,7 +1,7 @@
 package com.bookstore.library.entity.dto;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -12,7 +12,7 @@ public class AuthorDTO {
     private String name;
     private Integer age;
 
-    private Set<BookDTO> books = new HashSet<>();
+    private Collection<BookDTO> books = new HashSet<BookDTO>();
 
     public Long getAuthor_id() {
         return this.author_id;
@@ -39,12 +39,22 @@ public class AuthorDTO {
     }
 
 
-    public Set<BookDTO> getBooks() {
+    public Collection<BookDTO> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<BookDTO> books) {
+    public void setBooks(Collection<BookDTO> books) {
         this.books = books;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " author_id='" + getAuthor_id() + "'" +
+            ", name='" + getName() + "'" +
+            ", age='" + getAge() + "'" +
+            ", books='" + getBooks() + "'" +
+            "}";
     }
 
 }

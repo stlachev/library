@@ -119,9 +119,9 @@ public class OrdersServiceImpl implements OrdersService {
         }
         
         OrdersDTO ordersDTO = modelMapper.map(order, OrdersDTO.class);
-/*        Set<OrdersListDTO> setOrdersListDTO;
+/*        Collection<OrdersListDTO> setOrdersListDTO;
         if (ordersDTO.getOrders() == null) {
-            setOrdersListDTO = new HashSet<>();
+            setOrdersListDTO = new HashSet<OrdersListDTO>();
             ordersDTO.setOrders(setOrdersListDTO);
         }
         setOrdersListDTO = ordersDTO.getOrders();
@@ -130,7 +130,7 @@ public class OrdersServiceImpl implements OrdersService {
         ordersList.setBook(book.get());
         ordersList.setOrder(order.get());
         ordersList = ordersListRepository.save(ordersList);
-        System.out.println("book: " + book.get().getId() + ", order: " + order.get().getId());
+        System.out.println(ordersList.toString());
         OrdersListDTO orderListDTO = modelMapper.map(ordersList, OrdersListDTO.class);
         ordersDTO.addOrders(orderListDTO);
         Orders orderNew = ordersRepository.save(modelMapper.map(ordersDTO, Orders.class));

@@ -1,9 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
 @Table(name = "customers")
 @Entity
 public class Customer implements Serializable {
@@ -28,7 +27,7 @@ public class Customer implements Serializable {
     String customer_address;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Orders> orders = new HashSet<>();
+    private Collection<Orders> orders = new HashSet<Orders>();
 
     public void addOrder(Orders order) {
         this.orders.add(order);
@@ -73,12 +72,22 @@ public class Customer implements Serializable {
         this.customer_address = customer_address;
     }
 
-    public Set<Orders> getOrders() {
+    public Collection<Orders> getOrders() {
         return this.orders;
     }
 
-    public void setOrders(Set<Orders> orders) {
+    public void setOrders(Collection<Orders> orders) {
         this.orders = orders;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", customer_name='" + getCustomer_name() + "'" +
+            ", customer_address='" + getCustomer_address() + "'" +
+            ", orders='" + getOrders() + "'" +
+            "}";
     }
 
 }

@@ -1,9 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ public class Orders implements Serializable {
     private Customer customer;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "order")
-    private Set<OrdersList> orders = new HashSet<>();
+    private Collection<OrdersList> orders = new HashSet<OrdersList>();
 
     public void addOrders(OrdersList orders) {
         this.orders.add(orders);
@@ -68,12 +68,21 @@ public class Orders implements Serializable {
         this.customer = customer;
     }
 
-    public Set<OrdersList> getOrders() {
+    public Collection<OrdersList> getOrders() {
         return this.orders;
     }
 
-    public void setOrders(Set<OrdersList> orders) {
+    public void setOrders(Collection<OrdersList> orders) {
         this.orders = orders;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", customer='" + getCustomer() + "'" +
+            ", orders='" + getOrders() + "'" +
+            "}";
     }
 
 }

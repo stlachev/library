@@ -71,13 +71,21 @@ public class OrdersListServiceImpl implements OrdersListService{
         return ordersList.map(orderP -> modelMapper.map(ordersList, OrdersListDTO.class));
     }
 
+//------------------------------------
+
     @Override
     public List<OrdersListDTO> findByOrderId(@NotNull Long id) {
         List<OrdersList> ordersList = ordersListRepository.findByOrderId(id);
+
         if (ordersList.isEmpty()) {
             return null;
         }
         for (OrdersList _order : ordersList) {
+//            System.out.println(_order.toString());
+            if (_order == null) {
+                System.out.println("NULL");
+            }
+
             Book b =_order.getBook();
             if (b != null)
                 System.out.println(b.toString());

@@ -53,4 +53,13 @@ public class OrdersList implements Serializable {
         this.book = book;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", order='" + getOrder() + "'" +
+            ", book='" + getBook() + "'" +
+            "}";
+    }
+
 }

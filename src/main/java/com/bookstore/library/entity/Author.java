@@ -1,9 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -27,7 +27,7 @@ public class Author implements Serializable {
     private int age;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true)
-    private Set<Book> books = new HashSet<>();
+    private Collection<Book> books = new HashSet<Book>();
 
     public void addBook(Book book) {
         this.books.add(book);
@@ -48,11 +48,11 @@ public class Author implements Serializable {
         }
     }
 
-    public Long getAuthor_Id() {
+    public Long getAuthor_id() {
         return author_id;
     }
 
-    public void setAuthor_Id(Long author_id) {
+    public void setAuthor_id(Long author_id) {
         this.author_id = author_id;
     }
 
@@ -72,18 +72,18 @@ public class Author implements Serializable {
         this.age = age;
     }
 
-    public Set<Book> getBooks() {
+    public Collection<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<Book> books) {
+    public void setBooks(Collection<Book> books) {
         this.books = books;
     }
 
     @Override
     public String toString() {
         return "{" +
-            " author_id='" + getAuthor_Id() + "'" +
+            " author_id='" + getAuthor_id() + "'" +
             ", name='" + getName() + "'" +
             ", age='" + getAge() + "'" +
             ", books='" + getBooks() + "'" +
