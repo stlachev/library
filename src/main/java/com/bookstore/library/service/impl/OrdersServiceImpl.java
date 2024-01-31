@@ -2,6 +2,7 @@ package com.bookstore.library.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -53,9 +54,10 @@ public class OrdersServiceImpl implements OrdersService {
     public List<OrdersWithCustomerDTO> findAll() {
         List<Orders> orders = ordersRepository.findAll();
 /*
+//-------- Test
         Set<OrdersList> _orders = new HashSet<OrdersList>();
         for(Orders _order: orders) {
-            _orders.addAll(_order.getOrders());
+//            _orders.addAll(_order.getOrders());
             Set<OrdersList> ol = _order.getOrders();
             for (OrdersList _o : ol) {
                 System.out.println(_o.getBook().getTitle());
@@ -71,6 +73,15 @@ public class OrdersServiceImpl implements OrdersService {
     @Transactional(readOnly= true)
     public Optional<OrdersWithCustomerDTO> get(@NotNull Long id) {
         Optional<Orders> order = ordersRepository.findById(id);
+
+        //---- Test
+        if (order.isPresent()) {
+            Set<OrdersList> _ol = order.get().getOrders();
+            for (OrdersList _o : _ol) {
+                System.out.println(_o.getBook().getTitle());
+            }
+        }
+
         return (order.isPresent()) ?
             order.map(orderOp -> modelMapper.map(orderOp, OrdersWithCustomerDTO.class)) :
             Optional.empty();

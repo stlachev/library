@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class BookDTO {
-    protected Long id;
-    protected String title;
-    protected String genre;
-    protected Long qty;
-    protected float price;
+    private Long id;
+    private String title;
+    private String genre;
+    private Long qty;
+    private float price;
 
     @JsonIgnore
-    protected AuthorDTO author;
+    private AuthorDTO author;
 
     public Long getId() {
         return this.id;

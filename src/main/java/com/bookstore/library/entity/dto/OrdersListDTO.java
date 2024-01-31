@@ -7,12 +7,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class OrdersListDTO {
 
-    protected Long id;
+    private Long id;
 
     @JsonIgnore
-    protected OrdersDTO order;
+    private OrdersDTO order;
 
-    protected BookDTO book;
+    private BookDTO book;
 //    private BookWithAuthorsDTO book;
 
     public Long getId() {

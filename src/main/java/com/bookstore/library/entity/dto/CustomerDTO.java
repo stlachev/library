@@ -1,18 +1,18 @@
 package com.bookstore.library.entity.dto;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CustomerDTO {
-    protected Long id;
-    protected String customer_name;
-    protected String customer_address;
+    private Long id;
+    private String customer_name;
+    private String customer_address;
 
-    protected Set<OrdersDTO> orders = new HashSet<OrdersDTO>();
+    private Set<OrdersDTO> orders = new HashSet<OrdersDTO>();
 
     public Long getId() {
         return this.id;

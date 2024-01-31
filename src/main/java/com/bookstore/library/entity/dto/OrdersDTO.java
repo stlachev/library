@@ -10,12 +10,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
 public class OrdersDTO {
-    protected Long id;
+    private Long id;
 
     @JsonIgnore
-    protected CustomerDTO customer;
+    private CustomerDTO customer;
 
-    protected Set<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
+    private Set<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
 
     public Long getId() {
         return this.id;
