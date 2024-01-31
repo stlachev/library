@@ -1,7 +1,7 @@
 package com.bookstore.library.entity.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -12,7 +12,7 @@ public class CustomerDTO {
     private String customer_name;
     private String customer_address;
 
-    private Set<OrdersDTO> orders = new HashSet<OrdersDTO>();
+    private List<OrdersDTO> orders = new ArrayList<OrdersDTO>();
 
     public Long getId() {
         return this.id;
@@ -38,11 +38,11 @@ public class CustomerDTO {
         this.customer_address = customer_address;
     }
 
-    public Set<OrdersDTO> getOrders() {
+    public List<OrdersDTO> getOrders() {
         return this.orders;
     }
 
-    public void setOrders(Set<OrdersDTO> orders) {
+    public void setOrders(List<OrdersDTO> orders) {
         this.orders = orders;
     }
 

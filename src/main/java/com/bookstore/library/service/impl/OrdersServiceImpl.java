@@ -2,7 +2,6 @@ package com.bookstore.library.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -55,10 +54,10 @@ public class OrdersServiceImpl implements OrdersService {
         List<Orders> orders = ordersRepository.findAll();
 /*
 //-------- Test
-        Set<OrdersList> _orders = new HashSet<OrdersList>();
+        List<OrdersList> _orders = new ArrayList<OrdersList>();
         for(Orders _order: orders) {
 //            _orders.addAll(_order.getOrders());
-            Set<OrdersList> ol = _order.getOrders();
+            List<OrdersList> ol = _order.getOrders();
             for (OrdersList _o : ol) {
                 System.out.println(_o.getBook().getTitle());
             }
@@ -76,7 +75,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         //---- Test
         if (order.isPresent()) {
-            Set<OrdersList> _ol = order.get().getOrders();
+            List<OrdersList> _ol = order.get().getOrders();
             for (OrdersList _o : _ol) {
                 System.out.println(_o.getBook().getTitle());
             }

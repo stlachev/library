@@ -1,9 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
@@ -40,26 +40,7 @@ public class Orders implements Serializable {
     @Fetch(FetchMode.SUBSELECT)
     @BatchSize(size=10)
     @OneToMany (cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY)
-    private Set<OrdersList> orders = new HashSet<OrdersList>();
-
-    public void addOrders(OrdersList orders) {
-        this.orders.add(orders);
-        orders.setOrder(this);
-    }
-
-    public void removeOrders(OrdersList orders) {
-        orders.setOrder(null);
-        this.orders.remove(orders);
-    }
-
-    public void removeOrdersLists() {
-        Iterator<OrdersList> iterator = this.orders.iterator();
-        while (iterator.hasNext()) {
-            OrdersList orders = iterator.next();
-            orders.setOrder(null);
-            iterator.remove();
-        }
-    }
+    private List<OrdersList> orders = new ArrayList<OrdersList>();
 
     public Long getId() {
         return this.id;
@@ -79,13 +60,34 @@ public class Orders implements Serializable {
     }
 
     @Transactional(readOnly= true)
-    public Set<OrdersList> getOrders() {
+    public List<OrdersList> getOrders() {
         return this.orders;
     }
 
-    public void setOrders(Set<OrdersList> orders) {
+    public void setOrders(List<OrdersList> orders) {
         this.orders = orders;
     }
+
+    //----
+    public void addOrders(OrdersList orders) {
+        this.orders.add(orders);
+        orders.setOrder(this);
+    }
+
+    public void removeOrders(OrdersList orders) {
+        orders.setOrder(null);
+        this.orders.remove(orders);
+    }
+
+    public void removeOrdersLists() {
+        Iterator<OrdersList> iterator = this.orders.iterator();
+        while (iterator.hasNext()) {
+            OrdersList orders = iterator.next();
+            orders.setOrder(null);
+            iterator.remove();
+        }
+    }
+
 /*
     @Override
     public String toString() {

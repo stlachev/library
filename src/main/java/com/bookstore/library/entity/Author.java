@@ -1,9 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
@@ -35,7 +35,7 @@ public class Author implements Serializable {
     @BatchSize(size=10)
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Book> books = new HashSet<Book>();
+    private List<Book> books =  new ArrayList<Book>();
 
     public void addBook(Book book) {
         this.books.add(book);
@@ -84,11 +84,11 @@ public class Author implements Serializable {
     }
 
     @Transactional(readOnly= true)
-    public Set<Book> getBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(Set<Book> books) {
+    public void setBooks(List<Book> books) {
         this.books = books;
     }
 /*

@@ -1,9 +1,8 @@
 package com.bookstore.library.service.impl;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -78,9 +77,9 @@ public class OrdersListServiceImpl implements OrdersListService{
 
     @Transactional(readOnly= true)
     @Override
-    public Set<OrdersListDTO> findByOrderId(@NotNull Long id) {
+    public List<OrdersListDTO> findByOrderId(@NotNull Long id) {
         List<OrdersList> ordersList = ordersListRepository.findByOrderId(id);
-        Set<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
+        List<OrdersListDTO> orders = new ArrayList<OrdersListDTO>();
         if (ordersList == null || ordersList.isEmpty()) {
             return orders;
         }

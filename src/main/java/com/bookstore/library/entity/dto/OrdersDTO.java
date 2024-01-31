@@ -1,7 +1,8 @@
 package com.bookstore.library.entity.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +16,7 @@ public class OrdersDTO {
     @JsonIgnore
     private CustomerDTO customer;
 
-    private Set<OrdersListDTO> orders = new HashSet<OrdersListDTO>();
+    private List<OrdersListDTO> orders = new ArrayList<OrdersListDTO>();
 
     public Long getId() {
         return this.id;
@@ -33,17 +34,33 @@ public class OrdersDTO {
         this.customer = customer;
     }
 
-    public Set<OrdersListDTO> getOrders() {
+    public List<OrdersListDTO> getOrders() {
         return this.orders;
     }
 
-    public void setOrders(Set<OrdersListDTO> orders) {
+    public void setOrders(List<OrdersListDTO> orders) {
         this.orders =  orders;
     }
+
+//-----------
 
     public void addOrders(OrdersListDTO orders) {
         this.orders.add(orders);
         orders.setOrder(this);
+    }
+
+    public void removeOrders(OrdersListDTO orders) {
+        orders.setOrder(null);
+        this.orders.remove(orders);
+    }
+
+    public void removeOrdersLists() {
+        Iterator<OrdersListDTO> iterator = this.orders.iterator();
+        while (iterator.hasNext()) {
+            OrdersListDTO orders = iterator.next();
+            orders.setOrder(null);
+            iterator.remove();
+        }
     }
 
     @Override

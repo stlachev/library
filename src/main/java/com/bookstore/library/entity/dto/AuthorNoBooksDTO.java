@@ -1,13 +1,13 @@
 package com.bookstore.library.entity.dto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class AuthorNoBooksDTO extends AuthorDTO {
 
     @JsonIgnore
-    private Set<AuthorDTO> books = new HashSet<AuthorDTO>();
+    private List<AuthorDTO> books = new ArrayList<AuthorDTO>();
 
 }

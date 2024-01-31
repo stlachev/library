@@ -3,7 +3,6 @@ package com.bookstore.library.controller;
 import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,8 +68,8 @@ public class OrdersListController {
 
 //-----------------------------------
     @GetMapping("/order/{id}")
-    public ResponseEntity<Set<OrdersListDTO>> findByOrderId(@PathVariable Long id) throws Exception {
-        Set<OrdersListDTO> ordersListDTO = ordersListService.findByOrderId(id);
+    public ResponseEntity<List<OrdersListDTO>> findByOrderId(@PathVariable Long id) throws Exception {
+        List<OrdersListDTO> ordersListDTO = ordersListService.findByOrderId(id);
         return ordersListDTO.isEmpty() ?
             new ResponseEntity<>(HttpStatus.NOT_FOUND) :
             new ResponseEntity<>(ordersListDTO, HttpStatus.OK);

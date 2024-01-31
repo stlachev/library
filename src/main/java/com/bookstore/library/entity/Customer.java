@@ -1,9 +1,9 @@
 package com.bookstore.library.entity;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
@@ -34,7 +34,7 @@ public class Customer implements Serializable {
     @BatchSize(size=10)
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Orders> orders = new HashSet<Orders>();
+    private List<Orders> orders = new ArrayList<Orders>();
 
     public void addOrder(Orders order) {
         this.orders.add(order);
@@ -83,11 +83,11 @@ public class Customer implements Serializable {
     }
 
     @Transactional(readOnly= true)
-    public Set<Orders> getOrders() {
+    public List<Orders> getOrders() {
         return this.orders;
     }
 
-    public void setOrders(Set<Orders> orders) {
+    public void setOrders(List<Orders> orders) {
         this.orders = orders;
     }
 /*
