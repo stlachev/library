@@ -1,6 +1,5 @@
 package com.bookstore.library.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,6 +78,12 @@ public class OrdersListServiceImpl implements OrdersListService{
     @Override
     public List<OrdersListDTO> findByOrderId(@NotNull Long id) {
         List<OrdersList> ordersList = ordersListRepository.findByOrderId(id);
+
+        return ordersList.stream()
+                .map(orderOp -> modelMapper.map(orderOp, OrdersListDTO.class))
+                .collect(Collectors.toList());
+    }
+/*
         List<OrdersListDTO> orders = new ArrayList<OrdersListDTO>();
         if (ordersList == null || ordersList.isEmpty()) {
             return orders;
@@ -87,5 +92,7 @@ public class OrdersListServiceImpl implements OrdersListService{
             orders.add(modelMapper.map(_order, OrdersListDTO.class));
         }
         return orders;
+
     }
+*/
 }

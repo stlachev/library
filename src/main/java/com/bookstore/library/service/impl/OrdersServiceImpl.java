@@ -152,5 +152,10 @@ public class OrdersServiceImpl implements OrdersService {
         ordersDTO.addOrders(orderListDTO);
         Orders orderNew = ordersRepository.save(modelMapper.map(ordersDTO, Orders.class));
         return modelMapper.map(orderNew, OrdersWithCustomerDTO.class);
+
+//        List<OrdersList> ordersList2 = ordersListRepository.findByOrderId(id);
+//        return ordersList2.stream()
+//                .map(orderOp -> modelMapper.map(orderOp, OrdersListDTO.class))
+//                .collect(Collectors.toList());
     }
 }
