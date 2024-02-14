@@ -1,6 +1,6 @@
 package com.bookstore.library.entity.dto;
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -9,7 +9,7 @@ public class OrdersWithCustomerDTO extends OrdersDTO {
     @JsonIgnore
     private CustomerNoOrdersDTO customer;
 
-    private List<OrdersListDTO> orders = new ArrayList<OrdersListDTO>();
+//    private List<OrdersListDTO> orders = new ArrayList<OrdersListDTO>();
 //    private List<OrdersListAuthorDTO> orders = new ArrayList<OrdersListAuthorDTO>();
 
     public CustomerNoOrdersDTO getOrderCustomer() {
@@ -19,7 +19,7 @@ public class OrdersWithCustomerDTO extends OrdersDTO {
     public void setOrderCustomer(CustomerNoOrdersDTO customer) {
         this.customer = customer;
     }
-
+/*
     public List<OrdersListDTO> getOrders() {
         return this.orders;
     }
@@ -27,7 +27,7 @@ public class OrdersWithCustomerDTO extends OrdersDTO {
     public void setOrders(List<OrdersListDTO> orders) {
         this.orders =  orders;
     }
-
+*/
 /*
     public List<OrdersListAuthorDTO> getOrdersListAuthorDTO() {
         return this.orders;
@@ -47,7 +47,8 @@ public class OrdersWithCustomerDTO extends OrdersDTO {
         orders.setOrder(null);
         this.orders.remove(orders);
     }
-
+*/
+/*
     public void removeOrdersListAuthor() {
         Iterator<OrdersListAuthorDTO> iterator = this.orders.iterator();
         while (iterator.hasNext()) {
