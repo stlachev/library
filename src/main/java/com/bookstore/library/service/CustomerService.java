@@ -1,8 +1,10 @@
 package com.bookstore.library.service;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import com.bookstore.library.entity.auth.ChangePasswordRequest;
 import com.bookstore.library.entity.dto.CustomerDTO;
 
 import jakarta.validation.constraints.NotNull;
@@ -16,4 +18,5 @@ public interface CustomerService {
     public Optional<CustomerDTO> delete(@NotNull Long id);
     
     public List<CustomerDTO> findByName(@NotNull String name);
+    void changePassword(ChangePasswordRequest request, Principal connectedUser);
 }

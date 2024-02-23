@@ -1,26 +1,36 @@
 package com.bookstore.library.entity;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bookstore.library.auth.Role;
+import com.bookstore.library.entity.auth.Token;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 @Table(name = "customers")
 @Entity
-public class Customer implements Serializable {
+public class Customer implements UserDetails {
     
     private static final long serialVersionUID = 1L;
 
@@ -28,13 +38,71 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String customer_name;
-    private String customer_address;
+    private String name;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    private String telephone;
+
+    private String address;
 
     @BatchSize(size=10)
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)  //FetchType.EAGER
     private List<Orders> orders = new ArrayList<Orders>();
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @BatchSize(size=10)
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "customer")
+    private List<Token> tokens;
+
+    private LocalDateTime created;
+
+    @PrePersist
+    protected void onCreate() {
+        created = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public void addOrder(Orders order) {
         this.orders.add(order);
@@ -65,21 +133,21 @@ public class Customer implements Serializable {
     }
 
     @Transactional(readOnly= true)
-    public String getCustomer_name() {
-        return this.customer_name;
+    public String getName() {
+        return this.name;
     }
 
-    public void setCustomer_name(String customer_name) {
-        this.customer_name = customer_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Transactional(readOnly= true)
-    public String getCustomer_address() {
-        return this.customer_address;
+    public String getAddress() {
+        return this.address;
     }
 
-    public void setCustomer_address(String customer_address) {
-        this.customer_address = customer_address;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Transactional(readOnly= true)
@@ -89,6 +157,42 @@ public class Customer implements Serializable {
 
     public void setOrders(List<Orders> orders) {
         this.orders = orders;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 /*
     @Override

@@ -1,16 +1,60 @@
 package com.bookstore.library.entity.dto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CustomerDTO {
     private Long id;
-    private String customer_name;
-    private String customer_address;
+    private String name;
+    private String email;
+    private String telephone;
+    private String address;
+    private LocalDateTime created;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelephone() {
+        return this.telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public LocalDateTime getCreated() {
+        return this.created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
 
     private List<OrdersDTO> orders = new ArrayList<OrdersDTO>();
 
@@ -20,22 +64,6 @@ public class CustomerDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCustomer_name() {
-        return this.customer_name;
-    }
-
-    public void setCustomer_name(String customer_name) {
-        this.customer_name = customer_name;
-    }
-
-    public String getCustomer_address() {
-        return this.customer_address;
-    }
-
-    public void setCustomer_address(String customer_address) {
-        this.customer_address = customer_address;
     }
 
     public List<OrdersDTO> getOrders() {
@@ -50,8 +78,8 @@ public class CustomerDTO {
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
-            ", customer_name='" + getCustomer_name() + "'" +
-            ", customer_address='" + getCustomer_address() + "'" +
+            ", customer_name='" + getName() + "'" +
+            ", customer_address='" + getAddress() + "'" +
             "}";
     }
 

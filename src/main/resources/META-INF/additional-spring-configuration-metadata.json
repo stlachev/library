@@ -1,0 +1,20 @@
+{
+    "properties":
+    [
+        {
+            "name": "application.security.jwt.refresh-token.expiration",
+            "type": "java.lang.String",
+            "description": "Expiration in milliseconds (7 days)"
+        },
+        {
+            "name": "application.security.jwt.expiration",
+            "type": "java.lang.String",
+            "description": "Expiration in milliseconds (one day)"
+        },
+        {
+            "name": "application.security.jwt.secret_key",
+            "type": "java.lang.String",
+            "description": "Generated secret key"
+        }
+    ]
+}
