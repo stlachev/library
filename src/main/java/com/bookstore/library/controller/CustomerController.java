@@ -85,7 +85,7 @@ public class CustomerController {
 
     @PatchMapping
     public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request,
+            @Valid @RequestBody ChangePasswordRequest request,
             Principal connectedUser
     ) {
         customerService.changePassword(request, connectedUser);

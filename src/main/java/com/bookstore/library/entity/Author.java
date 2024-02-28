@@ -18,7 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+//@Builder
 @Table(name = "authors")
 @Entity
 public class Author implements Serializable {
@@ -35,6 +35,7 @@ public class Author implements Serializable {
     @BatchSize(size=10)
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true, fetch = FetchType.LAZY)
+//    @Builder.Default
     private List<Book> books =  new ArrayList<Book>();
 
     public void addBook(Book book) {
@@ -91,6 +92,8 @@ public class Author implements Serializable {
     public void setBooks(List<Book> books) {
         this.books = books;
     }
+
+
 /*
     @Override
     public String toString() {

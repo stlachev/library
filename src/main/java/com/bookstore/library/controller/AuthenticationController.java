@@ -2,6 +2,7 @@ package com.bookstore.library.controller;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import com.bookstore.library.service.impl.AuthenticationService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,23 +28,35 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(authenticationService.register(request));
+    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request){
+        AuthenticationResponse authenticationResponse = authenticationService.register(request);
+        if (authenticationResponse == null) {
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+//            return ResponseEntity.badRequest().build();
+//            return ResponseEntity.ofNullable(null);
+        }
+        return ResponseEntity.ok(authenticationResponse);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/adminregister")
-    public ResponseEntity<AuthenticationResponse> adminRegister(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.adminRegister(request));
+    public ResponseEntity<AuthenticationResponse> adminRegister(@Valid @RequestBody RegisterRequest request) {
+        AuthenticationResponse authenticationResponse = authenticationService.register(request);
+        if (authenticationResponse == null) {
+            return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
+//            return ResponseEntity.badRequest().build();
+//            return ResponseEntity.ofNullable(null);
+        }
+        return ResponseEntity.ok(authenticationResponse);
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticationRequest request){
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
     @PostMapping("/refresh-token")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void refreshToken(@Valid @RequestBody HttpServletRequest request, HttpServletResponse response) throws IOException {
         authenticationService.refreshToken(request, response);
     }
 

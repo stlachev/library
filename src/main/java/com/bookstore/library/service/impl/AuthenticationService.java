@@ -4,6 +4,8 @@ package com.bookstore.library.service.impl;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +30,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Service
 public class AuthenticationService {
 
+	private static final Logger logger = LogManager.getLogger("AuthenticationService");
     private final CustomerRepository customerRepository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -45,9 +48,14 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse register(RegisterRequest request) {
+        String email = request.getEmail();
+        if (customerRepository.findByEmail(email).isPresent()) {
+            logger.debug("Email exists");
+            return null;
+        }
         Customer customer = new Customer();
         customer.setName(request.getName());
-        customer.setEmail(request.getEmail());
+        customer.setEmail(email);
         customer.setPassword(passwordEncoder.encode(request.getPassword()));
         customer.setRole(Role.USER);
         var savedCustomer = customerRepository.save(customer);
@@ -59,9 +67,14 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse adminRegister(RegisterRequest request) {
+        String email = request.getEmail();
+        if (customerRepository.findByEmail(email).isPresent()) {
+            logger.debug("Email exists");
+            return null;
+        }
         Customer customer = new Customer();
         customer.setName(request.getName());
-        customer.setEmail(request.getEmail());
+        customer.setEmail(email);
         customer.setPassword(passwordEncoder.encode(request.getPassword()));
         customer.setRole(request.getRole());
         var savedCustomer = customerRepository.save(customer);
@@ -97,6 +110,7 @@ public class AuthenticationService {
         token.setExpired(false);
         token.setRevoked(false);
         tokenRepository.save(token);
+        logger.info("New customer token: {}", jwtToken);
     }
 
     private void revokeAllCustomerTokens(Customer customer) {

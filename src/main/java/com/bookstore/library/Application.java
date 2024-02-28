@@ -1,17 +1,21 @@
 package com.bookstore.library;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.bookstore.library.auth.Role;
+import com.bookstore.library.entity.auth.AuthenticationResponse;
 import com.bookstore.library.entity.auth.RegisterRequest;
 import com.bookstore.library.service.impl.AuthenticationService;
 
 @SpringBootApplication
 public class Application {
 
+	private static final Logger logger = LogManager.getLogger("bookstore");
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
@@ -19,14 +23,18 @@ public class Application {
 	@Bean
 	CommandLineRunner commandLineRunner(AuthenticationService service){
 		RegisterRequest adminUser = new RegisterRequest();
-		adminUser.setName("adminname");
-		adminUser.setEmail("admin@mail.bg");
-		adminUser.setPassword("1234");
+		adminUser.setName("Administrator");
+		adminUser.setEmail("admin");
+		adminUser.setPassword("admin");
 		adminUser.setRole(Role.ADMIN);
 
-		//service.
 		return args -> {
-			System.out.println("Admin token: " + service.adminRegister(adminUser).getAccessToken());
+			AuthenticationResponse response = service.adminRegister(adminUser);
+			if (response == null) {
+				logger.info("Admin customer with the same email exists");
+			} else {
+				logger.info("Admin customer created");
+			}
 		};
 	}
 
