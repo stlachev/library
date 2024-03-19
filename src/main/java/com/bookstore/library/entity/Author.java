@@ -8,7 +8,6 @@ import java.util.List;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -18,12 +17,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-//@Builder
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "authors")
 @Entity
 public class Author implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +41,8 @@ public class Author implements Serializable {
     @BatchSize(size=10)
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author", orphanRemoval = true, fetch = FetchType.LAZY)
-//    @Builder.Default
-    private List<Book> books =  new ArrayList<Book>();
+    @Builder.Default
+    private final List<Book> books =  new ArrayList<Book>();
 
     public void addBook(Book book) {
         this.books.add(book);
@@ -57,6 +63,7 @@ public class Author implements Serializable {
         }
     }
 
+/*
     @Transactional(readOnly= true)
     public Long getAuthor_id() {
         return author_id;
@@ -88,10 +95,10 @@ public class Author implements Serializable {
     public List<Book> getBooks() {
         return books;
     }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
+*/
+//    public void setBooks(List<Book> books) {
+//        this.books = books;
+//    }
 
 
 /*

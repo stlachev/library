@@ -30,10 +30,8 @@ public class Application {
 
 		return args -> {
 			AuthenticationResponse response = service.adminRegister(adminUser);
-			if (response == null) {
-				logger.info("Admin customer with the same email exists");
-			} else {
-				logger.info("Admin customer created");
+			if (response != null) {
+				logger.info("Admin created");
 			}
 		};
 	}

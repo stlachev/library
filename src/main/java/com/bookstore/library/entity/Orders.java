@@ -25,8 +25,6 @@ import jakarta.persistence.Table;
 @Table(name = "orders")
 public class Orders implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

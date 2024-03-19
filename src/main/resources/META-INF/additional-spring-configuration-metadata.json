@@ -1,5 +1,4 @@
-{
-    "properties":
+{"properties":
     [
         {
             "name": "application.security.jwt.refresh-token.expiration",
@@ -15,6 +14,11 @@
             "name": "application.security.jwt.secret_key",
             "type": "java.lang.String",
             "description": "Generated secret key"
+        },
+        {
+            "name": "application.security.jwt.enabled",
+            "type": "java.lang.String",
+            "description": "Security enabled flag"
         }
     ]
 }
